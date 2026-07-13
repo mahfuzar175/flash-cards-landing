@@ -1,550 +1,2066 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Flash Cards – Prodhan.com (Static Recreation)</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800;900&family=Anek+Bangla:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-  tailwind.config = {
-    corePlugins: { preflight: false },
-    theme: { extend: { colors: {
-      primary: '#0ea5e9', secondary: '#f97316', accent: '#8b5cf6',
-      foreground: '#0f172a', 'muted-foreground': '#64748b',
-      destructive: '#ef4444', 'destructive-foreground': '#ffffff'
-    }}}
-  }
-</script>
-<style>
-  body{font-family:'Noto Sans Bengali',sans-serif;margin:0;}
-  /* ---------- shared helpers ---------- */
-  .bg-grid-pattern{
-    background-image:linear-gradient(to right, rgba(14,165,233,.08) 1px, transparent 1px),
-                      linear-gradient(to bottom, rgba(14,165,233,.08) 1px, transparent 1px);
-    background-size:30px 30px;
-  }
-  @keyframes shine{0%{left:-100%}100%{left:200%}}
-  .animate-shine{animation:shine 2.5s infinite}
-  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-15px)}}
-  .animate-float{animation:float 4s ease-in-out infinite}
-  @keyframes fadeInLeft{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:translateX(0)}}
-  @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-  .fade-in-left{opacity:0;animation:fadeInLeft .6s ease-out forwards}
-  .fade-in-up{opacity:0;animation:fadeInUp .7s ease-out .2s forwards}
-  .btn-fix{border:none!important;outline:none!important;text-decoration:none!important;cursor:pointer}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flash Cards – Prodhan.com (Static Recreation)</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800;900&family=Anek+Bangla:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        corePlugins: { preflight: false },
+        theme: {
+          extend: {
+            colors: {
+              primary: "#0ea5e9",
+              secondary: "#f97316",
+              accent: "#8b5cf6",
+              foreground: "#0f172a",
+              "muted-foreground": "#64748b",
+              destructive: "#ef4444",
+              "destructive-foreground": "#ffffff",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: "Noto Sans Bengali", sans-serif;
+        margin: 0;
+      }
+      /* ---------- shared helpers ---------- */
+      .bg-grid-pattern {
+        background-image:
+          linear-gradient(
+            to right,
+            rgba(14, 165, 233, 0.08) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            to bottom,
+            rgba(14, 165, 233, 0.08) 1px,
+            transparent 1px
+          );
+        background-size: 30px 30px;
+      }
+      @keyframes shine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 200%;
+        }
+      }
+      .animate-shine {
+        animation: shine 2.5s infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-15px);
+        }
+      }
+      .animate-float {
+        animation: float 4s ease-in-out infinite;
+      }
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-in-left {
+        opacity: 0;
+        animation: fadeInLeft 0.6s ease-out forwards;
+      }
+      .fade-in-up {
+        opacity: 0;
+        animation: fadeInUp 0.7s ease-out 0.2s forwards;
+      }
+      .btn-fix {
+        border: none !important;
+        outline: none !important;
+        text-decoration: none !important;
+        cursor: pointer;
+      }
 
-  /* ---------- HERO ---------- */
-  /* #hero .text-gradient-fix{
+      /* ---------- HERO ---------- */
+      /* #hero .text-gradient-fix{
     background:linear-gradient(to right,#0ea5e9,#3b82f6,#f97316);
     -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;
   } */
-#hero .text-gradient-fix{
-    background: linear-gradient(to right,#0ea5e9,#3b82f6,#f97316);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    line-height: 1.3;        
-    padding-top: 4px;
-}
+      #hero .text-gradient-fix {
+        background: linear-gradient(to right, #0ea5e9, #3b82f6, #f97316);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        line-height: 1.3;
+        padding-top: 4px;
+      }
 
-  #hero .hero-product-img{border-radius:1.5rem;display:block;width:100%;height:auto;}
-  @keyframes pulse-ring{0%{box-shadow:0 0 0 0 rgba(249,115,22,.6)}70%{box-shadow:0 0 0 15px rgba(249,115,22,0)}100%{box-shadow:0 0 0 0 rgba(249,115,22,0)}}
-  .btn-pulse{animation:pulse-ring 2s infinite}
-  .hero-badge{display:flex;align-items:center;gap:.375rem;padding:.35rem .75rem;border-radius:9999px;border:1px solid;font-weight:600;white-space:nowrap;font-size:11px}
+      #hero .hero-product-img {
+        border-radius: 1.5rem;
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      @keyframes pulse-ring {
+        0% {
+          box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.6);
+        }
+        70% {
+          box-shadow: 0 0 0 15px rgba(249, 115, 22, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(249, 115, 22, 0);
+        }
+      }
+      .btn-pulse {
+        animation: pulse-ring 2s infinite;
+      }
+      .hero-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.35rem 0.75rem;
+        border-radius: 9999px;
+        border: 1px solid;
+        font-weight: 600;
+        white-space: nowrap;
+        font-size: 11px;
+      }
 
-  /* ---------- STICKY / OFFER ---------- */
-  #sticky-header{
-    position:fixed;top:0;left:0;width:100%;z-index:9999;
-    background:linear-gradient(to right,#e11d48,#be123c);
-    box-shadow:0 4px 25px rgba(0,0,0,.3);padding:10px 0;
-    transform:translateY(-100%);transition:transform .5s cubic-bezier(.16,1,.3,1);visibility:hidden;
-  }
-  #sticky-header.sticky-active{transform:translateY(0);visibility:visible}
-  .sticky-container{display:flex;align-items:center;justify-content:space-between;max-width:1000px;margin:0 auto;padding:0 12px;gap:8px}
-  .timer-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:.5rem}
-  #sticky-header .timer-box{width:42px;height:42px;border-radius:6px}
-  #sticky-header .timer-num{font-size:16px;font-weight:900;color:#fff;line-height:1}
-  #sticky-header .timer-label{font-size:8px;color:#ffe4e6;font-weight:700}
-  .btn-white{background:#fff;color:#e11d48;font-weight:900;border:none;outline:none;transition:.3s;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px}
-  .btn-white:hover{transform:translateY(2px);background:#f8fafc}
-  #offer-section .timer-box{width:3.4rem;height:3.4rem}
-  .diagonal-strike{position:relative;display:inline-block;color:rgba(255,255,255,.8);font-size:24px;font-weight:700}
-  .diagonal-strike::after{content:"";position:absolute;top:50%;left:-5%;width:110%;height:2px;background:#fde047;transform:rotate(-15deg)}
-  @keyframes price-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  .animate-price-bounce{animation:price-bounce 2s infinite ease-in-out}
-  @media (max-width:640px){
-    .sticky-container{gap:6px;padding:0 8px}
-    #sticky-header .timer-box{width:36px;height:36px}
-    #sticky-header .btn-white{padding:8px 10px;font-size:12px;border-radius:6px;gap:4px}
-    .sticky-price{font-size:18px}
-    .sticky-promo-text{display:flex;border-left:1px solid rgba(255,255,255,.2);padding-left:6px}
-  }
+      /* ---------- STICKY / OFFER ---------- */
+      #sticky-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 9999;
+        background: linear-gradient(to right, #e11d48, #be123c);
+        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        padding: 10px 0;
+        transform: translateY(-100%);
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        visibility: hidden;
+      }
+      #sticky-header.sticky-active {
+        transform: translateY(0);
+        visibility: visible;
+      }
+      .sticky-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 12px;
+        gap: 8px;
+      }
+      .timer-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 0.5rem;
+      }
+      #sticky-header .timer-box {
+        width: 42px;
+        height: 42px;
+        border-radius: 6px;
+      }
+      #sticky-header .timer-num {
+        font-size: 16px;
+        font-weight: 900;
+        color: #fff;
+        line-height: 1;
+      }
+      #sticky-header .timer-label {
+        font-size: 8px;
+        color: #ffe4e6;
+        font-weight: 700;
+      }
+      .btn-white {
+        background: #fff;
+        color: #e11d48;
+        font-weight: 900;
+        border: none;
+        outline: none;
+        transition: 0.3s;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+      .btn-white:hover {
+        transform: translateY(2px);
+        background: #f8fafc;
+      }
+      #offer-section .timer-box {
+        width: 3.4rem;
+        height: 3.4rem;
+      }
+      .diagonal-strike {
+        position: relative;
+        display: inline-block;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .diagonal-strike::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -5%;
+        width: 110%;
+        height: 2px;
+        background: #fde047;
+        transform: rotate(-15deg);
+      }
+      @keyframes price-bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-4px);
+        }
+      }
+      .animate-price-bounce {
+        animation: price-bounce 2s infinite ease-in-out;
+      }
+      @media (max-width: 640px) {
+        .sticky-container {
+          gap: 6px;
+          padding: 0 8px;
+        }
+        #sticky-header .timer-box {
+          width: 36px;
+          height: 36px;
+        }
+        #sticky-header .btn-white {
+          padding: 8px 10px;
+          font-size: 12px;
+          border-radius: 6px;
+          gap: 4px;
+        }
+        .sticky-price {
+          font-size: 18px;
+        }
+        .sticky-promo-text {
+          display: flex;
+          border-left: 1px solid rgba(255, 255, 255, 0.2);
+          padding-left: 6px;
+        }
+      }
 
-  /* ---------- BOX CONTENTS ---------- */
-  #box-contents .box-item-card{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;overflow:hidden;transition:.3s;display:flex;flex-direction:column;align-items:center}
-  #box-contents .box-item-card:hover{transform:translateY(-4px);border-color:#0ea5e9}
-  #box-contents .img-wrapper{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;overflow:hidden;border-bottom:1px solid #f8fafc}
-  #box-contents .img-wrapper img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
-  #box-contents .box-item-card:hover .img-wrapper img{transform:scale(1.05)}
-  #box-contents .box-item-card p{padding:.75rem .5rem;width:100%;margin:0;text-align:center;font-weight:600;color:#334155}
-  @keyframes boxFadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  .box-fade-in-up{opacity:0;animation:boxFadeInUp .6s ease-out forwards}
+      /* ---------- BOX CONTENTS ---------- */
+      #box-contents .box-item-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      #box-contents .box-item-card:hover {
+        transform: translateY(-4px);
+        border-color: #0ea5e9;
+      }
+      #box-contents .img-wrapper {
+        width: 100%;
+        aspect-ratio: 1/1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-bottom: 1px solid #f8fafc;
+      }
+      #box-contents .img-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s;
+      }
+      #box-contents .box-item-card:hover .img-wrapper img {
+        transform: scale(1.05);
+      }
+      #box-contents .box-item-card p {
+        padding: 0.75rem 0.5rem;
+        width: 100%;
+        margin: 0;
+        text-align: center;
+        font-weight: 600;
+        color: #334155;
+      }
+      @keyframes boxFadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .box-fade-in-up {
+        opacity: 0;
+        animation: boxFadeInUp 0.6s ease-out forwards;
+      }
 
-  /* ---------- FEATURES ---------- */
-  #features .feature-card{background:#fff;border:1px solid #e2e8f0;border-radius:.75rem;padding:.75rem;transition:.3s;text-align:center}
-  #features .feature-card:hover{transform:translateY(-4px);box-shadow:0 10px 15px -3px rgba(0,0,0,.1);border-color:#cbd5e1}
-  #features .icon-wrapper{display:inline-flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;border-radius:.5rem;margin:0 auto .75rem auto}
-  #features .icon-wrapper svg{width:1.25rem;height:1.25rem}
-  #features h3{font-size:.95rem;font-weight:700;color:#0f172a;margin:0 0 6px}
-  #features p{font-size:.8rem;color:#64748b;text-align:center;margin:0}
-  @keyframes featureFadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-  .features-fade-in-up{opacity:0;animation:featureFadeInUp .6s ease-out forwards}
+      /* ---------- FEATURES ---------- */
+      #features .feature-card {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 0.75rem;
+        transition: 0.3s;
+        text-align: center;
+      }
+      #features .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: #cbd5e1;
+      }
+      #features .icon-wrapper {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        margin: 0 auto 0.75rem auto;
+      }
+      #features .icon-wrapper svg {
+        width: 1.25rem;
+        height: 1.25rem;
+      }
+      #features h3 {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0 0 6px;
+      }
+      #features p {
+        font-size: 0.8rem;
+        color: #64748b;
+        text-align: center;
+        margin: 0;
+      }
+      @keyframes featureFadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .features-fade-in-up {
+        opacity: 0;
+        animation: featureFadeInUp 0.6s ease-out forwards;
+      }
 
-  /* ---------- CHECKOUT ---------- */
-  #checkout-section{font-family:'Anek Bangla',sans-serif;background:#eef4f8;}
-  #checkout-section .panel{background:#fff;border-radius:.75rem;padding:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid #e6edf3}
-  #checkout-section h2.section-title{font-size:1.15rem;font-weight:800;color:#0f172a;margin:0 0 1rem}
+      /* ---------- CHECKOUT ---------- */
+      #checkout-section {
+        font-family: "Anek Bangla", sans-serif;
+        background: #eef4f8;
+      }
+      #checkout-section .panel {
+        background: #fff;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        border: 1px solid #e6edf3;
+      }
+      #checkout-section h2.section-title {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 1rem;
+      }
 
-  /* product select cards */
-  .product-select-list{border:1px solid #f3d6d6;border-radius:.75rem;overflow:hidden;margin-bottom:1.75rem}
-  .product-select-card{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fdeeee;border-bottom:none;transition:.2s}
-  .product-select-card:last-child{border-bottom:none}
-  .product-select-card.unselected{background:#fdf6df}
-  .product-select-card .chk-wrap{flex:none}
-  .product-select-card input[type=checkbox]{width:19px;height:19px;accent-color:#e11d48;cursor:pointer}
-  .product-select-card .thumb{flex:none;width:46px;height:46px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center}
-  .product-select-card .thumb img{width:100%;height:100%;object-fit:cover}
-  .product-select-card .pname{flex:1 1 auto;min-width:0;font-weight:700;font-size:14px;color:#0f172a}
-  .product-select-card.unselected .pname{color:#dc2626}
-  .product-select-card .price-col{flex:none;text-align:right;font-size:12.5px;line-height:1.3;min-width:90px}
-  .product-select-card .price-old{display:block;color:#94a3b8;text-decoration:line-through;font-size:11.5px}
-  .product-select-card .price-new{display:block;font-weight:800;color:#0f172a}
-  /* .product-select-card .ribbon{position:absolute;top:8px;right:10px;background:#e11d48;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap} */
-  .product-select-card .ribbon{position:absolute;top:8px;right:10px;background:#e11d48;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:2}
-  .recommended-product{
+      /* product select cards */
+      .product-select-subtitle {
+        font-size: 12.5px;
+        color: #64748b;
+        margin: -0.5rem 0 1rem;
+      }
+      .product-select-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 1.75rem;
+      }
+      .product-select-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        background: #fff;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 12px;
+        transition: 0.2s;
+      }
+      .product-select-card.selected {
+        border-color: #e11d48;
+        background: #fff6f6;
+        box-shadow: 0 0 0 1px rgba(225, 29, 72, 0.12);
+      }
+      .product-select-card .chk-wrap {
+        flex: none;
+      }
+      .product-select-card input[type="checkbox"] {
+        width: 19px;
+        height: 19px;
+        accent-color: #e11d48;
+        cursor: pointer;
+      }
+      .product-select-card .thumb {
+        flex: none;
+        width: 46px;
+        height: 46px;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .product-select-card .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .product-select-card .pname {
+        flex: 1 1 auto;
+        min-width: 0;
+        font-weight: 700;
+        font-size: 14px;
+        color: #0f172a;
+      }
+      .product-select-card .price-col {
+        flex: none;
+        text-align: right;
+        font-size: 12.5px;
+        line-height: 1.3;
+        min-width: 90px;
+      }
+      .product-select-card .price-old {
+        display: block;
+        color: #94a3b8;
+        text-decoration: line-through;
+        font-size: 11.5px;
+      }
+      .product-select-card .price-new {
+        display: block;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .product-select-card .ribbon {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        background: #ff0000;
+        color: #fff;
+        font-size: 8px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 3px;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 2;
+      }
+      /* .recommended-product{
     border:2px dotted #ff9800 !important;
     border-radius:11px;
     animation:borderGlow 1.5s linear infinite;
-}
+} */
 
-@keyframes borderGlow{
-    0%{border-color:#ff9800;}
-    50%{border-color:#ffd54f;}
-    100%{border-color:#ff9800;}
-}
-  @media (max-width:480px){
-    .product-select-card{gap:8px;padding:10px}
-    .product-select-card .pname{font-size:12.5px}
-    .product-select-card .price-col{min-width:70px;font-size:11px}
-    .product-select-card .ribbon{font-size:8.5px;padding:2px 6px;top:6px;right:6px}
-  }
+      @keyframes borderGlow {
+        0% {
+          border-color: #ff9800;
+        }
+        50% {
+          border-color: #ffd54f;
+        }
+        100% {
+          border-color: #ff9800;
+        }
+      }
+      @media (max-width: 480px) {
+        .product-select-card {
+          gap: 8px;
+          padding: 10px;
+        }
+        .product-select-card .pname {
+          font-size: 12.5px;
+        }
+        .product-select-card .price-col {
+          min-width: 70px;
+          font-size: 11px;
+        }
+        .product-select-card .ribbon {
+          font-size: 8.5px;
+          padding: 2px 6px;
+          top: 6px;
+          right: 6px;
+        }
+      }
 
-  #checkout-section .qty-wrap{display:flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden;background:#fff;flex:none}
-  #checkout-section .qty-btn{padding:5px 10px;background:#f3f4f6;cursor:pointer;user-select:none;font-weight:700;font-size:14px}
-  #checkout-section .qty-btn:hover{background:#e5e7eb}
-  #checkout-section .qty-input{width:34px;text-align:center;border:none;outline:none;font-size:13px;-moz-appearance:textfield}
-  #checkout-section .qty-input::-webkit-outer-spin-button,
-  #checkout-section .qty-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-  .product-select-card.disabled .qty-wrap{opacity:.4;pointer-events:none}
+      #checkout-section .qty-wrap {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #fff;
+        flex: none;
+      }
+      #checkout-section .qty-btn {
+        padding: 5px 10px;
+        background: #f3f4f6;
+        cursor: pointer;
+        user-select: none;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      #checkout-section .qty-btn:hover {
+        background: #e5e7eb;
+      }
+      #checkout-section .qty-input {
+        width: 34px;
+        text-align: center;
+        border: none;
+        outline: none;
+        font-size: 13px;
+        -moz-appearance: textfield;
+      }
+      #checkout-section .qty-input::-webkit-outer-spin-button,
+      #checkout-section .qty-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .product-select-card:not(.selected) .qty-wrap {
+        opacity: 0.4;
+        pointer-events: none;
+      }
 
-  .custom-radio-option{display:block;position:relative;padding:12px 12px 12px 38px;margin-bottom:10px;background:#f9f9f9;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;font-weight:700;font-size:15px;color:#444}
-  .custom-radio-option:hover{border-color:#007cba;background:#f4f8fb}
-  .custom-radio-option.active-choice{border-color:#0ea5e9;background:#eef7fd;color:#0f172a}
-  .custom-radio-option input[type=radio]{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;accent-color:#0ea5e9}
+      .custom-radio-option {
+        display: block;
+        position: relative;
+        padding: 12px 12px 12px 38px;
+        margin-bottom: 10px;
+        background: #f9f9f9;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 15px;
+        color: #444;
+      }
+      .custom-radio-option:hover {
+        border-color: #007cba;
+        background: #f4f8fb;
+      }
+      .custom-radio-option.active-choice {
+        border-color: #0ea5e9;
+        background: #eef7fd;
+        color: #0f172a;
+      }
+      .custom-radio-option input[type="radio"] {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 17px;
+        height: 17px;
+        accent-color: #ff0000;
+      }
 
-  #checkout-section .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-  #checkout-section label{font-weight:700;font-size:13.5px;color:#334155}
-  #checkout-section label .opt{font-weight:500;color:#94a3b8}
-  #checkout-section input[type=text],
-  #checkout-section input[type=tel]{border:1px solid #cbd5e1;border-radius:8px;padding:11px 12px;font-size:15px;font-family:inherit;width:100%;box-sizing:border-box;background:#fff}
-  #checkout-section input[type=text]:focus,
-  #checkout-section input[type=tel]:focus{outline:none;border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.15)}
-  #checkout-section input.field-error{border-color:#e11d48;box-shadow:0 0 0 3px rgba(225,29,72,.12)}
+      #checkout-section .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 14px;
+      }
+      #checkout-section label {
+        font-weight: 700;
+        font-size: 13.5px;
+        color: #334155;
+      }
+      #checkout-section label .opt {
+        font-weight: 500;
+        color: #94a3b8;
+      }
+      #checkout-section input[type="text"],
+      #checkout-section input[type="tel"] {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 11px 12px;
+        font-size: 15px;
+        font-family: inherit;
+        width: 100%;
+        box-sizing: border-box;
+        background: #fff;
+      }
+      #checkout-section input[type="text"]:focus,
+      #checkout-section input[type="tel"]:focus {
+        outline: none;
+        border-color: #0ea5e9;
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.15);
+      }
+      #checkout-section input.field-error {
+        border-color: #e11d48;
+        box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.12);
+      }
 
-  /* order summary card */
-  .order-table{width:100%;border-collapse:collapse;font-size:14px}
-  .order-table th{text-align:left;padding:0 0 8px;font-size:12.5px;color:#64748b;font-weight:700;border-bottom:1px dashed #e2e8f0}
-  .order-table td{padding:12px 0;border-bottom:1px dashed #e2e8f0;vertical-align:middle}
-  .order-row-thumb{position:relative;width:52px;height:52px;flex:none}
-  .order-row-thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid #eee;background:#fff}
-  .order-row-remove{position:absolute;top:-6px;left:-6px;width:16px;height:16px;background:#fff;border:1px solid #cbd5e1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1;color:#94a3b8;cursor:pointer}
-  .order-row-remove:hover{background:#fee2e2;border-color:#e11d48;color:#e11d48}
-  .order-row-info{display:flex;align-items:center;gap:10px}
-  .order-row-name{font-size:13.5px;font-weight:600;color:#334155}
-  .order-sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #e2e8f0;font-size:14px}
-  .order-sum-row.total{font-weight:800;font-size:16px;border-bottom:none;padding-top:12px}
-  .cod-box{background:#f1f5f9;border-radius:8px;padding:12px;margin:1rem 0}
-  .cod-box .cod-title{font-weight:700;font-size:14px;margin-bottom:4px}
-  .cod-box .cod-desc{background:#e2e8f0;border-radius:6px;padding:8px 10px;font-size:12.5px;color:#475569}
-  .privacy-note{font-size:11.5px;color:#94a3b8;line-height:1.5;margin-bottom:1rem}
-  .privacy-note a{color:#e11d48;text-decoration:underline}
-  .place-order-btn{width:100%;padding:14px;background:#e11d48;color:#fff;font-weight:800;font-size:16px;border:none;border-radius:8px;cursor:pointer;transition:.2s}
-  .place-order-btn:hover{background:#be123c}
-  .place-order-btn:disabled{opacity:.6;cursor:not-allowed}
-</style>
-</head>
-<body>
+      /* order summary card */
+      .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      .order-table th {
+        text-align: left;
+        padding: 0 0 8px;
+        font-size: 12.5px;
+        color: #64748b;
+        font-weight: 700;
+        border-bottom: 1px dashed #e2e8f0;
+      }
+      .order-table td {
+        padding: 12px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        vertical-align: middle;
+      }
+      .order-row-thumb {
+        position: relative;
+        width: 52px;
+        height: 52px;
+        flex: none;
+      }
+      .order-row-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #eee;
+        background: #fff;
+      }
+      .order-row-remove {
+        position: absolute;
+        top: -6px;
+        left: -6px;
+        width: 16px;
+        height: 16px;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        line-height: 1;
+        color: #94a3b8;
+        cursor: pointer;
+      }
+      .order-row-remove:hover {
+        background: #fee2e2;
+        border-color: #e11d48;
+        color: #e11d48;
+      }
+      .order-row-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .order-row-name {
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #334155;
+      }
+      .order-sum-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        font-size: 14px;
+      }
+      .order-sum-row.total {
+        font-weight: 800;
+        font-size: 16px;
+        border-bottom: none;
+        padding-top: 12px;
+      }
+      .cod-box {
+        background: #f1f5f9;
+        border-radius: 8px;
+        padding: 12px;
+        margin: 1rem 0;
+      }
+      .cod-box .cod-title {
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+      .cod-box .cod-desc {
+        background: #e2e8f0;
+        border-radius: 6px;
+        padding: 8px 10px;
+        font-size: 12.5px;
+        color: #475569;
+      }
+      /* .cod-desc::before{
+    content:"";
+    position:absolute;
+    top:-10px;
+    left:20px;
+    width:0;
+    height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-bottom:10px solid #f1f1f1;
+} */
+      .privacy-note {
+        font-size: 9px;
+        color: #94a3b8;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+      }
+      .privacy-note a {
+        color: #e11d48;
+        text-decoration: underline;
+      }
+      .place-order-btn {
+        width: 100%;
+        padding: 14px;
+        background: #e11d48;
+        color: #fff;
+        font-weight: 800;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .place-order-btn:hover {
+        background: #be123c;
+      }
+      .place-order-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
 
-<!-- =========================================================
+      /* ---------- ORDER CONFIRMATION MODAL ---------- */
+      #order-confirm-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+      #order-confirm-overlay.open {
+        display: flex;
+      }
+      .oc-modal {
+        width: 100%;
+        max-width: 520px;
+        max-height: 100vh;
+        overflow-y: auto;
+        background: #fff;
+        border-radius: 16px;
+        position: relative;
+        animation: ocPop 0.25s ease;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      @keyframes ocPop {
+        from {
+          opacity: 0;
+          transform: translateY(12px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .oc-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.55);
+        color: #334155;
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+      }
+      .oc-close:hover {
+        background: rgba(255, 255, 255, 0.85);
+      }
+      .oc-head {
+        background: #fce7ec;
+        padding: 32px 24px 28px;
+        text-align: center;
+        border-radius: 16px 16px 0 0;
+      }
+      .oc-check {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 14px;
+        border-radius: 50%;
+        background: #16a34a;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .oc-check svg {
+        width: 30px;
+        height: 30px;
+      }
+      .oc-title {
+        font-family: "Anek Bangla", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        color: #16a34a;
+        margin: 0 0 2px;
+      }
+      .oc-sub {
+        font-size: 12px;
+        font-weight: 500;
+        color: #15803d;
+        line-height: 1.7;
+        margin: 0;
+      }
+      .oc-body {
+        padding: 16px 18px 0;
+      }
+      .oc-received {
+        text-align: center;
+        font-size: 14px;
+        color: #334155;
+        margin: 4px 0 18px;
+      }
+      .oc-meta {
+        background: #f1f5f9;
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+      .oc-meta div {
+        min-width: 0;
+      }
+      .oc-meta .oc-label {
+        font-size: 11px;
+        color: #64748b;
+        margin-bottom: 3px;
+      }
+      .oc-meta .oc-value {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: #0f172a;
+        word-break: break-word;
+      }
+      .oc-note {
+        font-size: 12.5px;
+        color: #475569;
+        margin-bottom: 16px;
+      }
+      .oc-details {
+        background: #f1f5f9;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      .oc-details h4 {
+        font-size: 14px;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 10px;
+      }
+      .oc-details table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12.5px;
+      }
+      .oc-details th {
+        text-align: left;
+        font-size: 11px;
+        color: #64748b;
+        font-weight: 600;
+        padding-bottom: 6px;
+        border-bottom: 1px dashed #cbd5e1;
+      }
+      .oc-details th:last-child,
+      .oc-details td:last-child {
+        text-align: right;
+      }
+      .oc-details td {
+        padding: 7px 0;
+        border-bottom: 1px dashed #e2e8f0;
+        color: #334155;
+      }
+      .oc-details tr:last-child td {
+        border-bottom: none;
+      }
+      .oc-details tr.oc-total-row td {
+        font-weight: 800;
+        color: #0f172a;
+      }
+      .oc-ship-note {
+        color: #94a3b8;
+        font-size: 11px;
+      }
+      .oc-addr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        background: #f1f5f9;
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 22px;
+      }
+      .oc-addr h5 {
+        font-size: 12.5px;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 0 0 8px;
+      }
+      .oc-addr p {
+        font-size: 12px;
+        color: #475569;
+        line-height: 1.6;
+        margin: 0;
+      }
+      .oc-banner {
+        background: #e11d48;
+        padding: 22px 20px;
+        text-align: center;
+        border-radius: 0 0 16px 16px;
+      }
+      .oc-banner p {
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        margin: 0 0 14px;
+      }
+      .oc-shop-btn {
+        display: inline-block;
+        background: #fff;
+        color: #e11d48;
+        font-weight: 800;
+        font-size: 13.5px;
+        padding: 10px 26px;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+      .oc-shop-btn:hover {
+        background: #ffe4e6;
+      }
+      @media (max-width: 420px) {
+        .oc-meta {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .oc-addr {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- =========================================================
      HERO
 ========================================================= -->
-<section id="hero" class="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-orange-50 pt-8 pb-8 md:pt-8 md:pb-10">
-  <div class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none" style="mask-image:radial-gradient(circle at center, black, transparent 80%);-webkit-mask-image:radial-gradient(circle at center, black, transparent 80%);"></div>
-  <div class="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
-  <div class="absolute bottom-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
+    <section
+      id="hero"
+      class="relative overflow-hidden bg-gradient-to-br from-sky-50 via-white to-orange-50 pt-8 pb-8 md:pt-8 md:pb-10"
+    >
+      <div
+        class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none"
+        style="
+          mask-image: radial-gradient(circle at center, black, transparent 80%);
+          -webkit-mask-image: radial-gradient(
+            circle at center,
+            black,
+            transparent 80%
+          );
+        "
+      ></div>
+      <div
+        class="absolute top-0 left-0 w-72 h-72 bg-primary/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+      ></div>
+      <div
+        class="absolute bottom-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl translate-x-1/3 translate-y-1/3"
+      ></div>
 
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
-    <div class="grid md:grid-cols-2 gap-0 md:gap-8 items-center">
-      <div class="order-2 md:order-1 text-center md:text-left fade-in-left relative z-10 mt-6 md:mt-0">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gradient-fix mb-3">
-          আপনার বাচ্চা ও শব্দ <br> চিনবে এখন খেলার ছলে
-        </h1>
-        <p class="text-base sm:text-lg max-w-lg mx-auto md:mx-0 text-slate-500 mb-5">
-          স্ক্রিনের ক্ষতিকর প্রভাব এড়িয়ে শিশুদের প্রাথমিক শিক্ষাকে নিরাপদ, আনন্দদায়ক ও কার্যকর করতে এই স্মার্ট ডিভাইসটি বিশেষভাবে ডিজাইন করা হয়েছে।
-        </p>
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
+        <div class="grid md:grid-cols-2 gap-0 md:gap-8 items-center">
+          <div
+            class="order-2 md:order-1 text-center md:text-left fade-in-left relative z-10 mt-6 md:mt-0"
+          >
+            <h1
+              class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gradient-fix mb-3"
+            >
+              আপনার বাচ্চা ও শব্দ <br />
+              চিনবে এখন খেলার ছলে
+            </h1>
+            <p
+              class="text-base sm:text-lg max-w-lg mx-auto md:mx-0 text-slate-500 mb-5"
+            >
+              স্ক্রিনের ক্ষতিকর প্রভাব এড়িয়ে শিশুদের প্রাথমিক শিক্ষাকে নিরাপদ,
+              আনন্দদায়ক ও কার্যকর করতে এই স্মার্ট ডিভাইসটি বিশেষভাবে ডিজাইন করা
+              হয়েছে।
+            </p>
 
-        <div class="flex flex-wrap items-center gap-2 justify-center md:justify-start mb-8">
-          <div class="hero-badge" style="background:#f5f3ff;border-color:#ddd6fe;color:#7c3aed">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-            BPA-ফ্রি
+            <div
+              class="flex flex-wrap items-center gap-2 justify-center md:justify-start mb-8"
+            >
+              <div
+                class="hero-badge"
+                style="
+                  background: #f5f3ff;
+                  border-color: #ddd6fe;
+                  color: #7c3aed;
+                "
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"
+                  />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                BPA-ফ্রি
+              </div>
+              <div
+                class="hero-badge"
+                style="
+                  background: #f0f9ff;
+                  border-color: #bae6fd;
+                  color: #0284c7;
+                "
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                </svg>
+                স্পষ্ট উচ্চারণ
+              </div>
+              <div
+                class="hero-badge"
+                style="
+                  background: #f0fdf4;
+                  border-color: #bbf7d0;
+                  color: #16a34a;
+                "
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"
+                  />
+                  <path d="M8 7h6" />
+                  <path d="M8 11h8" />
+                  <path d="M8 15h6" />
+                </svg>
+                ২২৪ টি শব্দ
+              </div>
+            </div>
+
+            <button
+              onclick="scrollToCheckout()"
+              class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full sm:w-auto px-6 py-2 md:px-8 md:py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105 btn-pulse z-10"
+            >
+              <span
+                class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"
+              ></span>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="relative z-10"
+              >
+                <circle cx="8" cy="21" r="1" />
+                <circle cx="19" cy="21" r="1" />
+                <path
+                  d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+                />
+              </svg>
+              <span class="relative z-10">এখনই অর্ডার করুন</span>
+            </button>
           </div>
-          <div class="hero-badge" style="background:#f0f9ff;border-color:#bae6fd;color:#0284c7">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
-            স্পষ্ট উচ্চারণ
-          </div>
-          <div class="hero-badge" style="background:#f0fdf4;border-color:#bbf7d0;color:#16a34a">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M8 7h6"/><path d="M8 11h8"/><path d="M8 15h6"/></svg>
-            ২২৪ টি শব্দ
+
+          <div
+            class="order-1 md:order-2 flex justify-center fade-in-up pb-2 md:pb-0"
+          >
+            <div class="relative w-full max-w-md">
+              <video
+                src="https://shop.prodhan.com/wp-content/uploads/2026/04/Flash-Card-Nasim-2nd-Video-720p.mp4"
+                autoplay
+                loop
+                playsinline
+                onclick="this.paused ? this.play() : this.pause()"
+                class="hero-product-img w-full h-auto object-cover cursor-pointer"
+                title="ভিডিওটি পজ বা প্লে করতে ক্লিক করুন"
+              ></video>
+            </div>
           </div>
         </div>
-
-        <button onclick="scrollToCheckout()" class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full sm:w-auto px-6 py-2 md:px-8 md:py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105 btn-pulse z-10">
-          <span class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"></span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-          <span class="relative z-10">এখনই অর্ডার করুন</span>
-        </button>
       </div>
+    </section>
 
-      <div class="order-1 md:order-2 flex justify-center fade-in-up pb-2 md:pb-0">
-        <div class="relative w-full max-w-md">
-          <video src="https://shop.prodhan.com/wp-content/uploads/2026/04/Flash-Card-Nasim-2nd-Video-720p.mp4" autoplay loop playsinline onclick="this.paused?this.play():this.pause()" class="hero-product-img w-full h-auto object-cover cursor-pointer" title="ভিডিওটি পজ বা প্লে করতে ক্লিক করুন"></video>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- =========================================================
+    <!-- =========================================================
      STICKY HEADER + OFFER COUNTDOWN
 ========================================================= -->
-<div id="sticky-header">
-  <div class="sticky-container">
-    <div class="flex items-center gap-1.5 sm:gap-4 pl-2 sm:pl-0">
-      <div class="flex flex-col">
-        <span class="text-[9px] sm:text-[11px] text-white/80 line-through font-bold">৳১৩০০</span>
-        <span class="sticky-price text-xl sm:text-2xl font-black text-yellow-300">৳৭৯৯</span>
+    <div id="sticky-header">
+      <div class="sticky-container">
+        <div class="flex items-center gap-1.5 sm:gap-4 pl-2 sm:pl-0">
+          <div class="flex flex-col">
+            <span
+              class="text-[9px] sm:text-[11px] text-white/80 line-through font-bold"
+              >৳১৩০০</span
+            >
+            <span
+              class="sticky-price text-xl sm:text-2xl font-black text-yellow-300"
+              >৳৭৯৯</span
+            >
+          </div>
+          <div
+            class="sticky-promo-text flex flex-col text-left border-l border-white/20 pl-2 sm:pl-3"
+          >
+            <span
+              class="text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider"
+              >ধামাকা অফার!</span
+            >
+            <span class="text-rose-100 text-[8px] sm:text-[10px] font-bold"
+              >স্টক সীমিত</span
+            >
+          </div>
+        </div>
+        <div class="flex items-center gap-1 sm:gap-2">
+          <div class="timer-box">
+            <span id="sticky-minutes" class="timer-num">০০</span
+            ><span class="timer-label">মিনিট</span>
+          </div>
+          <span class="text-white/40 font-bold text-lg">:</span>
+          <div class="timer-box">
+            <span id="sticky-seconds" class="timer-num">০০</span
+            ><span class="timer-label">সেকেন্ড</span>
+          </div>
+        </div>
+        <button
+          onclick="scrollToCheckout()"
+          class="btn-white relative overflow-hidden px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow-md"
+        >
+          <span
+            class="absolute top-0 left-[-100%] w-1/3 h-full bg-rose-100/50 skew-x-[30deg] animate-shine pointer-events-none"
+          ></span>
+          <span class="text-[12px] sm:text-base font-black">অর্ডার করুন</span>
+        </button>
       </div>
-      <div class="sticky-promo-text flex flex-col text-left border-l border-white/20 pl-2 sm:pl-3">
-        <span class="text-white text-[9px] sm:text-[11px] font-black uppercase tracking-wider">ধামাকা অফার!</span>
-        <span class="text-rose-100 text-[8px] sm:text-[10px] font-bold">স্টক সীমিত</span>
+    </div>
+
+    <section
+      id="offer-section"
+      class="relative overflow-hidden py-8 md:py-10 bg-gradient-to-br from-rose-600 to-red-600"
+    >
+      <div
+        class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none"
+        style="
+          mask-image: radial-gradient(circle at center, black, transparent 80%);
+        "
+      ></div>
+      <div class="max-w-xl mx-auto px-4 sm:px-6 relative z-10 text-center">
+        <h2 class="text-2xl sm:text-3xl font-black text-white -mb-2">
+          সীমিত সময়ের বিশেষ অফার!
+        </h2>
+        <p class="text-sm sm:text-base font-bold mb-1 text-rose-100">
+          স্টক শেষ হওয়ার আগেই লুফে নিন
+        </p>
+
+        <div class="flex flex-col items-center gap-3 mb-6">
+          <div
+            class="bg-[#fde047] text-[#991b1b] font-black px-4 py-1.5 rounded-md text-sm sm:text-base shadow-lg animate-bounce"
+          >
+            ৩৯% ছাড়
+          </div>
+          <div class="flex items-center justify-center gap-4 sm:gap-8">
+            <div class="diagonal-strike">৳১৩০০</div>
+            <div
+              class="text-5xl sm:text-7xl font-black text-white animate-price-bounce"
+            >
+              ৳৭৯৯
+              <span class="text-lg sm:text-3xl font-bold text-yellow-300"
+                >মাত্র</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-5 mt-3">
+          <p
+            class="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-3"
+          >
+            অফারটি শেষ হতে বাকি
+          </p>
+          <div class="flex items-center justify-center gap-2 sm:gap-3">
+            <div class="timer-box">
+              <span id="offer-hours" class="text-xl font-black text-white"
+                >০০</span
+              ><span class="text-[10px] font-bold text-rose-100">ঘণ্টা</span>
+            </div>
+            <span class="text-xl font-black text-white/30">:</span>
+            <div class="timer-box">
+              <span id="offer-minutes" class="text-xl font-black text-white"
+                >০০</span
+              ><span class="text-[10px] font-bold text-rose-100">মিনিট</span>
+            </div>
+            <span class="text-xl font-black text-white/30">:</span>
+            <div class="timer-box">
+              <span id="offer-seconds" class="text-xl font-black text-white"
+                >০০</span
+              ><span class="text-[10px] font-bold text-rose-100">সেকেন্ড</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-2 max-w-sm mx-auto">
+          <button
+            onclick="scrollToCheckout()"
+            class="btn-white relative overflow-hidden group w-full px-6 py-3 rounded-lg shadow-xl"
+          >
+            <span
+              class="absolute top-0 left-[-100%] w-1/3 h-full bg-rose-100/50 skew-x-[30deg] animate-shine pointer-events-none"
+            ></span>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="
+                display: inline-block;
+                vertical-align: -3px;
+                margin-right: 6px;
+              "
+            >
+              <circle cx="8" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path
+                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+              />
+            </svg>
+            <span class="text-2xl sm:text-lg font-extrabold"
+              >৭৯৯ টাকায় অর্ডার করুন</span
+            >
+          </button>
+        </div>
       </div>
-    </div>
-    <div class="flex items-center gap-1 sm:gap-2">
-      <div class="timer-box"><span id="sticky-minutes" class="timer-num">০০</span><span class="timer-label">মিনিট</span></div>
-      <span class="text-white/40 font-bold text-lg">:</span>
-      <div class="timer-box"><span id="sticky-seconds" class="timer-num">০০</span><span class="timer-label">সেকেন্ড</span></div>
-    </div>
-    <button onclick="scrollToCheckout()" class="btn-white relative overflow-hidden px-3 sm:px-5 py-2 sm:py-2.5 rounded-lg shadow-md">
-      <span class="absolute top-0 left-[-100%] w-1/3 h-full bg-rose-100/50 skew-x-[30deg] animate-shine pointer-events-none"></span>
-      <span class="text-[12px] sm:text-base font-black">অর্ডার করুন</span>
-    </button>
-  </div>
-</div>
+    </section>
 
-<section id="offer-section" class="relative overflow-hidden py-8 md:py-10 bg-gradient-to-br from-rose-600 to-red-600">
-  <div class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none" style="mask-image:radial-gradient(circle at center, black, transparent 80%)"></div>
-  <div class="max-w-xl mx-auto px-4 sm:px-6 relative z-10 text-center">
-    <h2 class="text-2xl sm:text-3xl font-black text-white -mb-2">সীমিত সময়ের বিশেষ অফার!</h2>
-    <p class="text-sm sm:text-base font-bold mb-1 text-rose-100">স্টক শেষ হওয়ার আগেই লুফে নিন</p>
-
-    <div class="flex flex-col items-center gap-3 mb-6">
-      <div class="bg-[#fde047] text-[#991b1b] font-black px-4 py-1.5 rounded-md text-sm sm:text-base shadow-lg animate-bounce">৩৯% ছাড়</div>
-      <div class="flex items-center justify-center gap-4 sm:gap-8">
-        <div class="diagonal-strike">৳১৩০০</div>
-        <div class="text-5xl sm:text-7xl font-black text-white animate-price-bounce">৳৭৯৯ <span class="text-lg sm:text-3xl font-bold text-yellow-300">মাত্র</span></div>
-      </div>
-    </div>
-
-    <div class="mb-5 mt-3">
-      <p class="text-[10px] font-bold text-white/70 uppercase tracking-widest mb-3">অফারটি শেষ হতে বাকি</p>
-      <div class="flex items-center justify-center gap-2 sm:gap-3">
-        <div class="timer-box"><span id="offer-hours" class="text-xl font-black text-white">০০</span><span class="text-[10px] font-bold text-rose-100">ঘণ্টা</span></div>
-        <span class="text-xl font-black text-white/30">:</span>
-        <div class="timer-box"><span id="offer-minutes" class="text-xl font-black text-white">০০</span><span class="text-[10px] font-bold text-rose-100">মিনিট</span></div>
-        <span class="text-xl font-black text-white/30">:</span>
-        <div class="timer-box"><span id="offer-seconds" class="text-xl font-black text-white">০০</span><span class="text-[10px] font-bold text-rose-100">সেকেন্ড</span></div>
-      </div>
-    </div>
-
-    <div class="mt-2 max-w-sm mx-auto">
-      <button onclick="scrollToCheckout()" class="btn-white relative overflow-hidden group w-full px-6 py-3 rounded-lg shadow-xl">
-        <span class="absolute top-0 left-[-100%] w-1/3 h-full bg-rose-100/50 skew-x-[30deg] animate-shine pointer-events-none"></span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-3px;margin-right:6px"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="text-2xl sm:text-lg font-extrabold">৭৯৯ টাকায় অর্ডার করুন</span>
-      </button>
-    </div>
-  </div>
-</section>
-
-<!-- =========================================================
+    <!-- =========================================================
      BOX CONTENTS
 ========================================================= -->
-<section id="box-contents" class="relative overflow-hidden py-8 md:py-8 bg-gradient-to-br from-sky-50 via-white to-orange-50">
-  <div class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none" style="mask-image:radial-gradient(circle at center, black, transparent 80%)"></div>
-  <div class="max-w-5xl mx-auto px-3 sm:px-6 relative z-10">
-    <div class="flex flex-col items-center justify-center text-center w-full mb-2 box-fade-in-up">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold">ফ্লাস কার্ড বক্সে যা যা পাবেন</h2>
-      <p class="max-w-2xl text-sm sm:text-base -mt-2 text-slate-500 font-semibold">একটি সুন্দর বক্সে আপনার সোনামণির জন্য প্রয়োজনীয় সব কিছুই দেওয়া আছে</p>
-    </div>
+    <section
+      id="box-contents"
+      class="relative overflow-hidden py-8 md:py-8 bg-gradient-to-br from-sky-50 via-white to-orange-50"
+    >
+      <div
+        class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none"
+        style="
+          mask-image: radial-gradient(circle at center, black, transparent 80%);
+        "
+      ></div>
+      <div class="max-w-5xl mx-auto px-3 sm:px-6 relative z-10">
+        <div
+          class="flex flex-col items-center justify-center text-center w-full mb-2 box-fade-in-up"
+        >
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold">
+            ফ্লাস কার্ড বক্সে যা যা পাবেন
+          </h2>
+          <p
+            class="max-w-2xl text-sm sm:text-base -mt-2 text-slate-500 font-semibold"
+          >
+            একটি সুন্দর বক্সে আপনার সোনামণির জন্য প্রয়োজনীয় সব কিছুই দেওয়া
+            আছে
+          </p>
+        </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
-      <div class="box-item-card box-fade-in-up" style="animation-delay:.1s">
-        <div class="img-wrapper"><img src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041744.jpeg" alt="১টি বেবি এডুকেশন ডিভাইস"></div>
-        <p>১টি বেবি এডুকেশন ডিভাইস</p>
-      </div>
-      <div class="box-item-card box-fade-in-up" style="animation-delay:.2s">
-        <div class="img-wrapper"><img src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746.jpeg" alt="১১২টি লার্নিং ফ্ল্যাশ কার্ড"></div>
-        <p>১১২টি লার্নিং ফ্ল্যাশ কার্ড</p>
-      </div>
-      <div class="box-item-card box-fade-in-up" style="animation-delay:.3s">
-        <div class="img-wrapper"><img src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746-1.jpeg" alt="১টি ইউএসবি চার্জিং ক্যাবল"></div>
-        <p>১টি ইউএসবি (USB) চার্জিং ক্যাবল</p>
-      </div>
-      <div class="box-item-card box-fade-in-up" style="animation-delay:.4s">
-        <div class="img-wrapper"><img src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746-2.jpeg" alt="১টি ব্যবহার নির্দেশিকা"></div>
-        <p>১টি ব্যবহার নির্দেশিকা (ম্যানুয়াল বুক)</p>
-      </div>
-    </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+          <div
+            class="box-item-card box-fade-in-up"
+            style="animation-delay: 0.1s"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041744.jpeg"
+                alt="১টি বেবি এডুকেশন ডিভাইস"
+              />
+            </div>
+            <p>১টি বেবি এডুকেশন ডিভাইস</p>
+          </div>
+          <div
+            class="box-item-card box-fade-in-up"
+            style="animation-delay: 0.2s"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746.jpeg"
+                alt="১১২টি লার্নিং ফ্ল্যাশ কার্ড"
+              />
+            </div>
+            <p>১১২টি লার্নিং ফ্ল্যাশ কার্ড</p>
+          </div>
+          <div
+            class="box-item-card box-fade-in-up"
+            style="animation-delay: 0.3s"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746-1.jpeg"
+                alt="১টি ইউএসবি চার্জিং ক্যাবল"
+              />
+            </div>
+            <p>১টি ইউএসবি (USB) চার্জিং ক্যাবল</p>
+          </div>
+          <div
+            class="box-item-card box-fade-in-up"
+            style="animation-delay: 0.4s"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041746-2.jpeg"
+                alt="১টি ব্যবহার নির্দেশিকা"
+              />
+            </div>
+            <p>১টি ব্যবহার নির্দেশিকা (ম্যানুয়াল বুক)</p>
+          </div>
+        </div>
 
-    <div class="mt-10 md:mt-12 flex flex-col items-center justify-center gap-3 box-fade-in-up" style="animation-delay:.5s">
-      <button onclick="scrollToCheckout()" class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full max-w-sm px-6 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105">
-        <span class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"></span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="relative z-10"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
-        <span class="relative z-10">অর্ডার করতে চাই</span>
-      </button>
-      <div class="grid grid-cols-2 gap-3 w-full max-w-sm mt-1">
-        <a href="#" target="_blank" class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-[13px] sm:text-sm px-2 py-2 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21"/><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z"/><path d="M14 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z"/><path d="M9.5 13.5c.5 1 1.5 1 2.5 1s2-.5 2.5-1"/></svg>
-          <span>হোয়াটসঅ্যাপ</span>
-        </a>
-        <a href="#" class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-[13px] sm:text-sm px-2 py-2 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          <span>কল করুন</span>
-        </a>
+        <div
+          class="mt-10 md:mt-12 flex flex-col items-center justify-center gap-3 box-fade-in-up"
+          style="animation-delay: 0.5s"
+        >
+          <button
+            onclick="scrollToCheckout()"
+            class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full max-w-sm px-6 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+          >
+            <span
+              class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"
+            ></span>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="relative z-10"
+            >
+              <circle cx="8" cy="21" r="1" />
+              <circle cx="19" cy="21" r="1" />
+              <path
+                d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
+              />
+            </svg>
+            <span class="relative z-10">অর্ডার করতে চাই</span>
+          </button>
+          <div class="grid grid-cols-2 gap-3 w-full max-w-sm mt-1">
+            <a
+              href="#"
+              target="_blank"
+              class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold text-[13px] sm:text-sm px-2 py-2 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                <path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z" />
+                <path d="M14 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1Z" />
+                <path d="M9.5 13.5c.5 1 1.5 1 2.5 1s2-.5 2.5-1" />
+              </svg>
+              <span>হোয়াটসঅ্যাপ</span>
+            </a>
+            <a
+              href="#"
+              class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-1.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-[13px] sm:text-sm px-2 py-2 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+              <span>কল করুন</span>
+            </a>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- =========================================================
+    <!-- =========================================================
      FEATURES
 ========================================================= -->
-<section id="features" class="relative overflow-hidden pb-8 pt-4 md:pb-8 md:pt-4 bg-gradient-to-br from-sky-50 via-white to-orange-50">
-  <div class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none" style="mask-image:radial-gradient(circle at center, black, transparent 80%)"></div>
-  <div class="max-w-5xl mx-auto px-3 sm:px-6 relative z-10">
-    <div class="flex flex-col items-center justify-center text-center w-full mb-8 features-fade-in-up">
-      <h2 class="!text-3xl sm:text-2xl font-bold">বাচ্চাকে কেন এই ফ্লাস কার্ডটি কিনে দিবেন?</h2>
-      <p p class="max-w-2xl !text-lg sm:text-sm !-mt-2 text-slate-600 w-full">বাচ্চার প্রথম শিক্ষার জন্য যা যা প্রয়োজন— বর্ণমালা, সংখ্যা, প্রাণী, ফলমূলসহ সবকিছুই আছে এতে।</p>
-    </div>
+    <section
+      id="features"
+      class="relative overflow-hidden pb-8 pt-4 md:pb-8 md:pt-4 bg-gradient-to-br from-sky-50 via-white to-orange-50"
+    >
+      <div
+        class="absolute inset-0 bg-grid-pattern z-0 pointer-events-none"
+        style="
+          mask-image: radial-gradient(circle at center, black, transparent 80%);
+        "
+      ></div>
+      <div class="max-w-5xl mx-auto px-3 sm:px-6 relative z-10">
+        <div
+          class="flex flex-col items-center justify-center text-center w-full mb-8 features-fade-in-up"
+        >
+          <h2 class="!text-3xl sm:text-2xl font-bold">
+            বাচ্চাকে কেন এই ফ্লাস কার্ডটি কিনে দিবেন?
+          </h2>
+          <p
+            p
+            class="max-w-2xl !text-lg sm:text-sm !-mt-2 text-slate-600 w-full"
+          >
+            বাচ্চার প্রথম শিক্ষার জন্য যা যা প্রয়োজন— বর্ণমালা, সংখ্যা, প্রাণী,
+            ফলমূলসহ সবকিছুই আছে এতে।
+          </p>
+        </div>
 
-    <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-      <div class="feature-card features-fade-in-up" style="animation-delay:.1s">
-        <div class="icon-wrapper" style="background:#f3e8ff;color:#9333ea"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/></svg></div>
-        <h3>ব্রেন ডেভেলপমেন্ট</h3><p>খেলার ছলে নতুন শব্দ শিখবে, যা বাচ্চার ব্রেন ও সেন্সরি বিকাশে দারুণ কাজ করবে।</p>
-      </div>
-      <div class="feature-card features-fade-in-up" style="animation-delay:.2s">
-        <div class="icon-wrapper" style="background:#eff6ff;color:#3b82f6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-        <h3>ভোকাবুলারি বাড়াতে</h3><p>১১২টি কার্ডে ২২৪টি ইংরেজি-বাংলা শব্দ ও মিউজিক থাকায় বাচ্চা দ্রুত শব্দ মুখস্থ করতে পারবে।</p>
-      </div>
-      <div class="feature-card features-fade-in-up" style="animation-delay:.3s">
-        <div class="icon-wrapper" style="background:#dcfce7;color:#16a34a"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"/></svg></div>
-        <h3>শতভাগ নিরাপদ</h3><p>সম্পূর্ণ BPA-ফ্রি ও টেকসই উপাদানে তৈরি। বাচ্চা মুখে দিলেও কোনো ক্ষতিকর প্রভাব পড়বে না।</p>
-      </div>
-      <div class="feature-card features-fade-in-up" style="animation-delay:.4s">
-        <div class="icon-wrapper" style="background:#ffedd5;color:#ea580c"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.7.6 5.1 1.7Z"/></svg></div>
-        <h3>সহজ ব্যবহার</h3><p>হালকা ও আকর্ষণীয় ডিজাইন হওয়ায় ছোট বাচ্চারা খুব সহজেই নিজে নিজে চালাতে পারবে।</p>
-      </div>
-      <div class="feature-card features-fade-in-up" style="animation-delay:.5s">
-        <div class="icon-wrapper" style="background:#ffe4e6;color:#e11d48"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg></div>
-        <h3>মোবাইলের আসক্তি কমায়</h3><p>মোবাইল বা ট্যাবের ক্ষতিকর আলো থেকে দূরে রেখে চোখের সুরক্ষা নিশ্চিত করে।</p>
-      </div>
-      <div class="feature-card features-fade-in-up" style="animation-delay:.6s">
-        <div class="icon-wrapper" style="background:#ccfbf1;color:#0d9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="10" x="2" y="7" rx="2" ry="2"/><line x1="22" x2="22" y1="11" y2="13"/></svg></div>
-        <h3>USB রিচার্জেবল</h3><p>বারবার ব্যাটারি কেনার ঝামেলা নেই। একবার চার্জ দিলে দীর্ঘক্ষণ ব্যবহার করা যায়।</p>
-      </div>
-    </div>
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.1s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #f3e8ff; color: #9333ea"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"
+                />
+                <path
+                  d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"
+                />
+                <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+              </svg>
+            </div>
+            <h3>ব্রেন ডেভেলপমেন্ট</h3>
+            <p>
+              খেলার ছলে নতুন শব্দ শিখবে, যা বাচ্চার ব্রেন ও সেন্সরি বিকাশে দারুণ
+              কাজ করবে।
+            </p>
+          </div>
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.2s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #eff6ff; color: #3b82f6"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+              </svg>
+            </div>
+            <h3>ভোকাবুলারি বাড়াতে</h3>
+            <p>
+              ১১২টি কার্ডে ২২৪টি ইংরেজি-বাংলা শব্দ ও মিউজিক থাকায় বাচ্চা দ্রুত
+              শব্দ মুখস্থ করতে পারবে।
+            </p>
+          </div>
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.3s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #dcfce7; color: #16a34a"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path
+                  d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.5 3.8 17 5 19 5a1 1 0 0 1 1 1z"
+                />
+              </svg>
+            </div>
+            <h3>শতভাগ নিরাপদ</h3>
+            <p>
+              সম্পূর্ণ BPA-ফ্রি ও টেকসই উপাদানে তৈরি। বাচ্চা মুখে দিলেও কোনো
+              ক্ষতিকর প্রভাব পড়বে না।
+            </p>
+          </div>
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.4s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #ffedd5; color: #ea580c"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M9 12h.01" />
+                <path d="M15 12h.01" />
+                <path d="M10 16c.5.3 1.2.5 2 .5s1.5-.2 2-.5" />
+                <path
+                  d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.7.6 5.1 1.7Z"
+                />
+              </svg>
+            </div>
+            <h3>সহজ ব্যবহার</h3>
+            <p>
+              হালকা ও আকর্ষণীয় ডিজাইন হওয়ায় ছোট বাচ্চারা খুব সহজেই নিজে নিজে
+              চালাতে পারবে।
+            </p>
+          </div>
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.5s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #ffe4e6; color: #e11d48"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+                <path d="M12 18h.01" />
+              </svg>
+            </div>
+            <h3>মোবাইলের আসক্তি কমায়</h3>
+            <p>
+              মোবাইল বা ট্যাবের ক্ষতিকর আলো থেকে দূরে রেখে চোখের সুরক্ষা নিশ্চিত
+              করে।
+            </p>
+          </div>
+          <div
+            class="feature-card features-fade-in-up"
+            style="animation-delay: 0.6s"
+          >
+            <div
+              class="icon-wrapper"
+              style="background: #ccfbf1; color: #0d9488"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect width="16" height="10" x="2" y="7" rx="2" ry="2" />
+                <line x1="22" x2="22" y1="11" y2="13" />
+              </svg>
+            </div>
+            <h3>USB রিচার্জেবল</h3>
+            <p>
+              বারবার ব্যাটারি কেনার ঝামেলা নেই। একবার চার্জ দিলে দীর্ঘক্ষণ
+              ব্যবহার করা যায়।
+            </p>
+          </div>
+        </div>
 
-    <div class="mt-10 md:mt-12 flex flex-col items-center justify-center gap-3 features-fade-in-up" style="animation-delay:.7s">
-      <button onclick="scrollToCheckout()" class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full max-w-sm px-6 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105">
-        <span class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"></span>
-        <span class="relative z-10">অর্ডার করতে চাই</span>
-      </button>
-    </div>
-  </div>
-</section>
+        <div
+          class="mt-10 md:mt-12 flex flex-col items-center justify-center gap-3 features-fade-in-up"
+          style="animation-delay: 0.7s"
+        >
+          <button
+            onclick="scrollToCheckout()"
+            class="btn-fix relative overflow-hidden group inline-flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold text-lg w-full max-w-sm px-6 py-2.5 rounded-lg transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+          >
+            <span
+              class="absolute top-0 left-[-100%] w-1/3 h-full bg-white/30 skew-x-[30deg] animate-shine pointer-events-none"
+            ></span>
+            <span class="relative z-10">অর্ডার করতে চাই</span>
+          </button>
+        </div>
+      </div>
+    </section>
 
-<!-- =========================================================
+    <!-- =========================================================
      CHECKOUT (client-side demo — wire the form action / fetch()
      call below to your own order-processing endpoint)
 ========================================================= -->
-<section id="checkout-section" class="py-10">
-  <div class="max-w-6xl mx-auto px-4">
+    <section id="checkout-section" class="py-10">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="panel mb-6">
+          <h2
+            class="section-title"
+            style="
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              margin-bottom: 0.25rem;
+            "
+          >
+            🛒 Your Products
+          </h2>
+          <p class="product-select-subtitle">
+            পছন্দের পণ্যটি সিলেক্ট করুন, তারপর নিচে ফর্ম পূরণ করুন
+          </p>
+          <div class="product-select-list" id="product-list">
+            <!-- JS renders product-select-cards here -->
+          </div>
+        </div>
 
-    <div class="panel mb-6">
-      <h2 class="section-title">Your Products</h2>
-      <div class="product-select-list" id="product-list"><!-- JS renders product-select-cards here --></div>
+        <form id="checkout-form" onsubmit="return submitOrder(event);">
+          <div class="grid lg:grid-cols-3 gap-6 items-start">
+            <!-- LEFT: delivery + contact form -->
+            <div class="lg:col-span-2 panel">
+              <h2 class="section-title">অর্ডার করতে ফর্মটি পূরণ করতে হবে</h2>
+
+              <h3 class="font-bold mt-1 mb-2 text-[15px]">
+                ডেলিভারি এলাকা নির্বাচন করুন
+              </h3>
+              <label class="custom-radio-option active-choice">
+                <input
+                  type="radio"
+                  name="shipping_area"
+                  value="inside_dhaka"
+                  checked
+                  onchange="onShippingChange(this)"
+                />
+                ঢাকার ভিতরে (৬০৳)
+              </label>
+              <label class="custom-radio-option">
+                <input
+                  type="radio"
+                  name="shipping_area"
+                  value="outside_dhaka"
+                  onchange="onShippingChange(this)"
+                />
+                ঢাকার বাহিরে (১২০৳)
+              </label>
+              <!-- NAME -->
+              <div class="field mt-6">
+                <label>আপনার নাম লিখুন *</label>
+                <input type="text" name="name" required  placeholder="Enter your full name" />
+              </div>
+              <!-- PHN NMBR -->
+              <div class="field">
+                <label
+                  >আপনার ফোন নাম্বারটি লিখুন <span class="req">*</span></label
+                >
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="01XXXXXXXXX"
+                  pattern="^01[3-9]\d{8}$"
+                  title="আপনার  ১১ সংখ্যার ফোন নাম্বারটি প্রয়োজন।"
+                  required
+                />
+              </div>
+              <!-- address -->
+              <div class="field mb-0">
+                <label>আপনার সম্পূর্ণ এড্রেস টি লিখুন *</label>
+                <input type="text" name="address" required placeholder="Enter your full address"/>
+              </div>
+            </div>
+
+            <!-- RIGHT: live order summary -->
+            <div class="panel lg:sticky lg:top-4">
+              <h2 class="section-title">Your order</h2>
+              <table class="order-table">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th style="text-align: right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="order-rows">
+                  <!-- JS renders order rows here -->
+                </tbody>
+              </table>
+
+              <div class="order-sum-row">
+                <span>Subtotal</span><span id="rowsubtotal">৭৯৯.০০৳</span>
+              </div>
+              <div class="order-sum-row total">
+                <span>Total</span><span id="rowtotal">৮৫৯.০০৳</span>
+              </div>
+
+              <div class="cod-box">
+                <div class="cod-title">Cash on delivery</div>
+                <div class="cod-desc">Pay with cash upon delivery.</div>
+              </div>
+
+              <p class="privacy-note">
+                Your personal data will be used to process your order, support
+                your experience throughout this website, and for other purposes
+                described in our <a href="#">privacy policy</a>.
+              </p>
+
+              <button
+                type="submit"
+                id="place-order-btn"
+                class="place-order-btn"
+              >
+                অর্ডার করুন <span id="btntotal">৮৫৯.০০৳</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- =========================================================
+     ORDER CONFIRMATION MODAL
+========================================================= -->
+    <div id="order-confirm-overlay">
+      <div class="oc-modal">
+        <button
+          type="button"
+          class="oc-close"
+          onclick="closeOrderConfirmation()"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+
+        <div class="oc-head">
+          <div class="oc-check">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M5 13l4 4L19 7"
+                stroke="#fff"
+                stroke-width="3"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+          <h3 class="oc-title">অভিনন্দন</h3>
+          <p class="oc-sub">
+            আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে। ধন্যবাদ।
+          </p>
+        </div>
+
+        <div class="oc-body">
+          <div class="oc-meta">
+            <div>
+              <div class="oc-label">Order number:</div>
+              <div class="oc-value" id="oc-order-number">—</div>
+            </div>
+            <div>
+              <div class="oc-label">Date:</div>
+              <div class="oc-value" id="oc-order-date">—</div>
+            </div>
+            <div>
+              <div class="oc-label">Total:</div>
+              <div class="oc-value" id="oc-order-total">—</div>
+            </div>
+            <div>
+              <div class="oc-label">Payment method:</div>
+              <div class="oc-value">Cash on delivery</div>
+            </div>
+          </div>
+
+          <p class="oc-note">Pay with cash upon delivery.</p>
+
+          <div class="oc-details">
+            <h4>Order details</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="oc-order-rows"></tbody>
+              <tbody>
+                <tr>
+                  <td>Subtotal:</td>
+                  <td id="oc-subtotal"></td>
+                </tr>
+                <tr>
+                  <td>Shipping:</td>
+                  <td>
+                    <span id="oc-shipping"></span>
+                    <span class="oc-ship-note" id="oc-shipping-area"></span>
+                  </td>
+                </tr>
+                <tr class="oc-total-row">
+                  <td>Total:</td>
+                  <td id="oc-total"></td>
+                </tr>
+                <tr>
+                  <td>Payment method:</td>
+                  <td>Cash on delivery</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="oc-addr">
+            <div>
+              <h5>Billing address</h5>
+              <p id="oc-billing">—</p>
+            </div>
+            <div>
+              <h5>Shipping address</h5>
+              <p id="oc-shipping-addr">N/A</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="oc-banner">
+          <p>আমাদের অন্যান্য প্রোডাক্টগুলো দেখতে ভিজিট করুন</p>
+          <a
+            href="https://prodhan.com"
+            target="_blank"
+            rel="noopener"
+            class="oc-shop-btn"
+            >🛍️ শপ দেখুন</a
+          >
+        </div>
+      </div>
     </div>
 
-    <form id="checkout-form" onsubmit="return submitOrder(event)">
-      <div class="grid lg:grid-cols-3 gap-6 items-start">
+    <script>
+      function scrollToCheckout() {
+        document
+          .getElementById("checkout-section")
+          .scrollIntoView({ behavior: "smooth" });
+      }
 
-        <!-- LEFT: delivery + contact form -->
-        <div class="lg:col-span-2 panel">
-          <h2 class="section-title">অর্ডার করতে ফর্মটি পূরণ করতে হবে</h2>
+      /* ---- countdown (client-side, 20-minute repeating loop) ---- */
+      function toBengaliNum(n) {
+        const d = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+        return n.toString().replace(/\d/g, (x) => d[x]);
+      }
+      function startCountdown() {
+        const KEY = "flashcard_offer_loop_v1";
+        const CYCLE = 20 * 60 * 1000;
+        let end = localStorage.getItem(KEY);
+        const now = Date.now();
+        if (!end || parseInt(end) < now) {
+          end = now + CYCLE;
+          localStorage.setItem(KEY, end);
+        } else {
+          end = parseInt(end);
+        }
+        setInterval(() => {
+          const now2 = Date.now();
+          let dist = end - now2;
+          if (dist < 0) {
+            end = now2 + CYCLE;
+            localStorage.setItem(KEY, end);
+            dist = CYCLE;
+          }
+          const h = Math.floor(dist / 3600000),
+            m = Math.floor((dist % 3600000) / 60000),
+            s = Math.floor((dist % 60000) / 1000);
+          const bh = toBengaliNum(String(h).padStart(2, "0")),
+            bm = toBengaliNum(String(m).padStart(2, "0")),
+            bs = toBengaliNum(String(s).padStart(2, "0"));
+          document.getElementById("offer-hours").innerText = bh;
+          document.getElementById("offer-minutes").innerText = bm;
+          document.getElementById("offer-seconds").innerText = bs;
+          document.getElementById("sticky-minutes").innerText = bm;
+          document.getElementById("sticky-seconds").innerText = bs;
+        }, 1000);
+      }
 
-          <h3 class="font-bold mt-1 mb-2 text-[15px]">ডেলিভারি এলাকা নির্বাচন করুন</h3>
-          <label class="custom-radio-option active-choice">
-            <input type="radio" name="shipping_area" value="inside_dhaka" checked onchange="onShippingChange(this)"> ঢাকার ভিতরে (৬০৳)
-          </label>
-          <label class="custom-radio-option">
-            <input type="radio" name="shipping_area" value="outside_dhaka" onchange="onShippingChange(this)"> ঢাকার বাহিরে (১২০৳)
-          </label>
+      function initStickyVisibility() {
+        const header = document.getElementById("sticky-header");
+        const offer = document.getElementById("offer-section");
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (e.isIntersecting) header.classList.remove("sticky-active");
+              else header.classList.add("sticky-active");
+            });
+          },
+          { threshold: 0.1 },
+        );
+        if (offer) obs.observe(offer);
+      }
 
-          <div class="field mt-6">
-            <label>আপনার নাম লিখুন *</label>
-            <input type="text" name="name" required>
-          </div>
-          <div class="field">
-            <label>আপনার ফোন নাম্বারটি লিখুন <span class="opt">(optional)</span></label>
-            <input type="tel" name="phone">
-          </div>
-          <div class="field mb-0">
-            <label>আপনার সম্পূর্ণ এড্রেস টি লিখুন *</label>
-            <input type="text" name="address" required>
-          </div>
-        </div>
+      function initRadioStyling() {
+        document
+          .querySelectorAll('input[name="shipping_area"]')
+          .forEach((r) => {
+            r.addEventListener("change", () => {
+              document
+                .querySelectorAll(".custom-radio-option")
+                .forEach((l) => l.classList.remove("active-choice"));
+              r.parentElement.classList.add("active-choice");
+            });
+          });
+      }
+      function onShippingChange() {
+        renderTotals();
+      }
 
-        <!-- RIGHT: live order summary -->
-        <div class="panel lg:sticky lg:top-4">
-          <h2 class="section-title">Your order</h2>
-          <table class="order-table">
-            <thead><tr><th>Product</th><th style="text-align:right">Subtotal</th></tr></thead>
-            <tbody id="order-rows"><!-- JS renders order rows here --></tbody>
-          </table>
+      /* ---- product / cart state ---- */
+      const PRODUCTS = [
+        {
+          id: "flashcard",
+          name: "Talking Flash Card",
+          img: "https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041744-300x300.jpeg",
+          original: 1300,
+          price: 799,
+          checked: true,
+          qty: 1,
+          badge: null,
+          recommended: false,
+        },
+        {
+          id: "talkingbook",
+          name: "Intelligence Talking Book",
+          img: "https://shop.prodhan.com/wp-content/uploads/2026/04/Talking-book-For-hero-section-300x300.png",
+          original: 1500,
+          price: 899,
+          checked: false,
+          qty: 1,
+          badge: "বেস্ট রিকমেন্ডেড প্রোডাক্ট",
+          recommended: true,
+        },
+      ];
 
-          <div class="order-sum-row"><span>Subtotal</span><span id="rowsubtotal">৭৯৯.০০৳</span></div>
-          <div class="order-sum-row total"><span>Total</span><span id="rowtotal">৮৫৯.০০৳</span></div>
+      function fmt(v) {
+        return toBengaliNum(v.toLocaleString("en-US")) + ".০০৳";
+      }
 
-          <div class="cod-box">
-            <div class="cod-title">Cash on delivery</div>
-            <div class="cod-desc">Pay with cash upon delivery.</div>
-          </div>
-
-          <p class="privacy-note">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
-
-          <button type="submit" id="place-order-btn" class="place-order-btn">অর্ডার করুন <span id="btntotal">৮৫৯.০০৳</span></button>
-        </div>
-
-      </div>
-    </form>
-  </div>
-</section>
-
-<script>
-  function scrollToCheckout(){
-    document.getElementById('checkout-section').scrollIntoView({behavior:'smooth'});
-  }
-
-  /* ---- countdown (client-side, 20-minute repeating loop) ---- */
-  function toBengaliNum(n){
-    const d=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
-    return n.toString().replace(/\d/g,x=>d[x]);
-  }
-  function startCountdown(){
-    const KEY='flashcard_offer_loop_v1';
-    const CYCLE=20*60*1000;
-    let end=localStorage.getItem(KEY);
-    const now=Date.now();
-    if(!end || parseInt(end)<now){ end=now+CYCLE; localStorage.setItem(KEY,end); } else { end=parseInt(end); }
-    setInterval(()=>{
-      const now2=Date.now();
-      let dist=end-now2;
-      if(dist<0){ end=now2+CYCLE; localStorage.setItem(KEY,end); dist=CYCLE; }
-      const h=Math.floor(dist/3600000), m=Math.floor((dist%3600000)/60000), s=Math.floor((dist%60000)/1000);
-      const bh=toBengaliNum(String(h).padStart(2,'0')), bm=toBengaliNum(String(m).padStart(2,'0')), bs=toBengaliNum(String(s).padStart(2,'0'));
-      document.getElementById('offer-hours').innerText=bh;
-      document.getElementById('offer-minutes').innerText=bm;
-      document.getElementById('offer-seconds').innerText=bs;
-      document.getElementById('sticky-minutes').innerText=bm;
-      document.getElementById('sticky-seconds').innerText=bs;
-    },1000);
-  }
-
-  function initStickyVisibility(){
-    const header=document.getElementById('sticky-header');
-    const offer=document.getElementById('offer-section');
-    const obs=new IntersectionObserver(entries=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting) header.classList.remove('sticky-active');
-        else header.classList.add('sticky-active');
-      });
-    },{threshold:0.1});
-    if(offer) obs.observe(offer);
-  }
-
-  function initRadioStyling(){
-    document.querySelectorAll('input[name="shipping_area"]').forEach(r=>{
-      r.addEventListener('change',()=>{
-        document.querySelectorAll('.custom-radio-option').forEach(l=>l.classList.remove('active-choice'));
-        r.parentElement.classList.add('active-choice');
-      });
-    });
-  }
-  function onShippingChange(){ renderTotals(); }
-
-  /* ---- product / cart state ---- */
-  const PRODUCTS=[
-    {
-      id:'flashcard',
-      name:'Talking Flash Card',
-      img:'https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041744-300x300.jpeg',
-      original:1300, price:799,
-      checked:true, qty:1,
-      badge:null,
-      recommended:false
-    },
-    {
-      id:'talkingbook',
-      name:'Intelligence Talking Book',
-      img:'https://shop.prodhan.com/wp-content/uploads/2026/04/Talking-book-For-hero-section-300x300.png',
-      original:1500, price:899,
-      checked:false, qty:1,
-      badge:'বেস্ট রিকমেন্ডেড প্রোডাক্ট',
-      recommended:true
-    }
-  ];
-
-  function fmt(v){ return toBengaliNum(v.toLocaleString('en-US'))+'.০০৳'; }
-
-  function renderProductList(){
-    const wrap=document.getElementById('product-list');
-    wrap.innerHTML=PRODUCTS.map(p=>`
-      <div class="product-select-card ${p.checked?'':'unselected'} ${p.checked?'':'disabled'} ${p.recommended?'recommended-product':''}" data-id="${p.id}">
-        ${p.badge?`<span class="ribbon">${p.badge}</span>`:''}
+      function renderProductList() {
+        const wrap = document.getElementById("product-list");
+        wrap.innerHTML = PRODUCTS.map(
+          (p) => `
+      <div class="product-select-card ${p.checked ? "selected" : ""} ${p.recommended ? "recommended-product" : ""}" data-id="${p.id}">
+        ${p.badge ? `<span class="ribbon">${p.badge}</span>` : ""}
         <span class="chk-wrap">
-          <input type="checkbox" ${p.checked?'checked':''} onchange="toggleProduct('${p.id}', this.checked)">
+          <input type="checkbox" ${p.checked ? "checked" : ""} onchange="toggleProduct('${p.id}', this.checked)">
         </span>
         <span class="thumb"><img src="${p.img}" alt="${p.name}"></span>
         <span class="pname">${p.name}</span>
@@ -554,40 +2070,44 @@
           <span class="qty-btn" onclick="changeQty('${p.id}',1)">+</span>
         </span>
         <span class="price-col">
-          <span class="price-old">${toBengaliNum(p.original.toLocaleString('en-US'))}.০০৳</span>
-          <span class="price-new">${toBengaliNum(p.price.toLocaleString('en-US'))}.০০৳</span>
+          <span class="price-old">${toBengaliNum(p.original.toLocaleString("en-US"))}.০০৳</span>
+          <span class="price-new">${toBengaliNum(p.price.toLocaleString("en-US"))}.০০৳</span>
         </span>
       </div>
-    `).join('');
-  }
+    `,
+        ).join("");
+      }
 
-  function toggleProduct(id, checked){
-    const p=PRODUCTS.find(x=>x.id===id);
-    p.checked=checked;
-    renderProductList();
-    renderTotals();
-  }
-  function changeQty(id, delta){
-    const p=PRODUCTS.find(x=>x.id===id);
-    p.qty=Math.max(1,(p.qty||1)+delta);
-    renderProductList();
-    renderTotals();
-  }
-  function setQty(id, val){
-    const p=PRODUCTS.find(x=>x.id===id);
-    p.qty=Math.max(1,parseInt(val)||1);
-    renderTotals();
-  }
+      function toggleProduct(id, checked) {
+        const p = PRODUCTS.find((x) => x.id === id);
+        p.checked = checked;
+        renderProductList();
+        renderTotals();
+      }
+      function changeQty(id, delta) {
+        const p = PRODUCTS.find((x) => x.id === id);
+        p.qty = Math.max(1, (p.qty || 1) + delta);
+        renderProductList();
+        renderTotals();
+      }
+      function setQty(id, val) {
+        const p = PRODUCTS.find((x) => x.id === id);
+        p.qty = Math.max(1, parseInt(val) || 1);
+        renderTotals();
+      }
 
-  function renderTotals(){
-    const selected=PRODUCTS.filter(p=>p.checked);
-    const rowsEl=document.getElementById('order-rows');
-    const placeBtn=document.getElementById('place-order-btn');
+      function renderTotals() {
+        const selected = PRODUCTS.filter((p) => p.checked);
+        const rowsEl = document.getElementById("order-rows");
+        const placeBtn = document.getElementById("place-order-btn");
 
-    if(selected.length===0){
-      rowsEl.innerHTML='<tr><td colspan="2" style="text-align:center;color:#94a3b8;padding:16px 0">কোনো পণ্য নির্বাচিত নয়</td></tr>';
-    } else {
-      rowsEl.innerHTML=selected.map(p=>`
+        if (selected.length === 0) {
+          rowsEl.innerHTML =
+            '<tr><td colspan="2" style="text-align:center;color:#94a3b8;padding:16px 0">কোনো পণ্য নির্বাচিত নয়</td></tr>';
+        } else {
+          rowsEl.innerHTML = selected
+            .map(
+              (p) => `
         <tr>
           <td>
             <div class="order-row-info">
@@ -598,45 +2118,143 @@
               <span class="order-row-name">${p.name} <strong>× ${toBengaliNum(p.qty)}</strong></span>
             </div>
           </td>
-          <td style="text-align:right">${fmt(p.price*p.qty)}</td>
+          <td style="text-align:right">${fmt(p.price * p.qty)}</td>
         </tr>
-      `).join('');
-    }
+      `,
+            )
+            .join("");
+        }
 
-    const subtotal=selected.reduce((s,p)=>s+p.price*p.qty,0);
-    const shipInsideEl=document.querySelector('input[name="shipping_area"]:checked');
-    const shipInside=!shipInsideEl || shipInsideEl.value==='inside_dhaka';
-    const shipping=selected.length? (shipInside?60:120) : 0;
-    const total=subtotal+shipping;
+        const subtotal = selected.reduce((s, p) => s + p.price * p.qty, 0);
+        const shipInsideEl = document.querySelector(
+          'input[name="shipping_area"]:checked',
+        );
+        const shipInside =
+          !shipInsideEl || shipInsideEl.value === "inside_dhaka";
+        const shipping = selected.length ? (shipInside ? 60 : 120) : 0;
+        const total = subtotal + shipping;
 
-    document.getElementById('rowsubtotal').innerText=fmt(subtotal);
-    document.getElementById('rowtotal').innerText=fmt(total);
-    document.getElementById('btntotal').innerText=fmt(total);
+        document.getElementById("rowsubtotal").innerText = fmt(subtotal);
+        document.getElementById("rowtotal").innerText = fmt(total);
+        document.getElementById("btntotal").innerText = fmt(total);
 
-    placeBtn.disabled=selected.length===0;
-  }
+        placeBtn.disabled = selected.length === 0;
+      }
 
-  function submitOrder(e){
-    e.preventDefault();
-    const selected=PRODUCTS.filter(p=>p.checked);
-    if(selected.length===0){
-      alert('অর্ডার করতে অন্তত একটি প্রোডাক্ট সিলেক্ট করুন।');
-      return false;
-    }
-    // ---- Wire this to your real backend, e.g.:
-    // fetch('/your-order-endpoint', { method:'POST', body: new FormData(e.target) })
-    //   .then(r => r.json()).then(data => { ...redirect to thank-you page... });
-    alert('এটি একটি ডেমো ফর্ম — প্রকৃত অর্ডার প্রসেস করতে আপনার ব্যাকএন্ড এন্ডপয়েন্টের সাথে সংযুক্ত করুন।');
-    return false;
-  }
+      function submitOrder(e) {
+        e.preventDefault();
+        const selected = PRODUCTS.filter((p) => p.checked);
+        if (selected.length === 0) {
+          alert("অর্ডার করতে অন্তত একটি প্রোডাক্ট সিলেক্ট করুন।");
+          return false;
+        }
 
-  document.addEventListener('DOMContentLoaded',()=>{
-    startCountdown();
-    initStickyVisibility();
-    initRadioStyling();
-    renderProductList();
-    renderTotals();
-  });
-</script>
-</body>
+        const form = e.target;
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return false;
+        }
+
+        // ---- Wire this to your real backend, e.g.:
+        // fetch('/your-order-endpoint', { method:'POST', body: new FormData(form) })
+        //   .then(r => r.json())
+        //   .then(data => showOrderConfirmation(data)) // pass real order data from server
+        //   .catch(() => alert('দুঃখিত, অর্ডার সাবমিট করা যায়নি। আবার চেষ্টা করুন।'));
+        //
+        // Below is a client-side demo confirmation using the current form/cart state.
+        const orderData = buildDemoOrderData(form, selected);
+        showOrderConfirmation(orderData);
+        return false;
+      }
+
+      /* ---- builds a demo order object from current form + cart state ----
+         Replace this with the response from your real backend endpoint. */
+      function buildDemoOrderData(form, selected) {
+        const fd = new FormData(form);
+        const shipInside = fd.get("shipping_area") !== "outside_dhaka";
+        const shipping = shipInside ? 60 : 120;
+        const subtotal = selected.reduce((s, p) => s + p.price * p.qty, 0);
+        return {
+          orderNumber: Math.floor(10000 + Math.random() * 89999),
+          date: new Date(),
+          name: fd.get("name") || "",
+          phone: fd.get("phone") || "",
+          address: fd.get("address") || "",
+          items: selected.map((p) => ({
+            name: p.name,
+            qty: p.qty,
+            lineTotal: p.price * p.qty,
+          })),
+          subtotal,
+          shipping,
+          shipInside,
+          total: subtotal + shipping,
+        };
+      }
+
+      function showOrderConfirmation(order) {
+        document.getElementById("oc-order-number").innerText =
+          "#" + order.orderNumber;
+        document.getElementById("oc-order-date").innerText =
+          order.date.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+        document.getElementById("oc-order-total").innerText = fmt(
+          order.total,
+        );
+
+        document.getElementById("oc-order-rows").innerHTML = order.items
+          .map(
+            (it) => `
+          <tr>
+            <td>${it.name} × ${toBengaliNum(it.qty)}</td>
+            <td>${fmt(it.lineTotal)}</td>
+          </tr>`,
+          )
+          .join("");
+
+        document.getElementById("oc-subtotal").innerText = fmt(
+          order.subtotal,
+        );
+        document.getElementById("oc-shipping").innerText = fmt(
+          order.shipping,
+        );
+        document.getElementById("oc-shipping-area").innerText =
+          "via " + (order.shipInside ? "ঢাকার ভিতরে" : "ঢাকার বাহিরে");
+        document.getElementById("oc-total").innerText = fmt(order.total);
+
+        document.getElementById("oc-billing").innerHTML =
+          `${order.name}<br>${order.address}` +
+          (order.phone ? `<br>${order.phone}` : "");
+
+        document.getElementById("order-confirm-overlay").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeOrderConfirmation() {
+        document
+          .getElementById("order-confirm-overlay")
+          .classList.remove("open");
+        document.body.style.overflow = "";
+      }
+
+      document
+        .getElementById("order-confirm-overlay")
+        .addEventListener("click", (e) => {
+          if (e.target.id === "order-confirm-overlay") {
+            closeOrderConfirmation();
+          }
+        });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        startCountdown();
+        initStickyVisibility();
+        initRadioStyling();
+        renderProductList();
+        renderTotals();
+      });
+    </script>
+  </body>
 </html>
