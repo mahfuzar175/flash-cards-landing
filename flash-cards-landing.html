@@ -103,24 +103,86 @@
   .features-fade-in-up{opacity:0;animation:featureFadeInUp .6s ease-out forwards}
 
   /* ---------- CHECKOUT ---------- */
-  #checkout-section{font-family:'Anek Bangla',sans-serif;}
-  #checkout-section .wcf-item{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;background:#fff}
-  #checkout-section .wcf-item img{width:60px;height:60px;object-fit:cover;border-radius:6px}
-  #checkout-section .qty-wrap{display:flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden}
-  #checkout-section .qty-btn{padding:6px 12px;background:#f3f4f6;cursor:pointer;user-select:none;font-weight:700}
-  #checkout-section .qty-input{width:44px;text-align:center;border:none;outline:none}
-  .custom-radio-option{display:block;position:relative;padding:10px 10px 10px 35px;margin-bottom:8px;background:#f9f9f9;border:1px solid #e0e0e0;border-radius:6px;cursor:pointer;font-weight:600;font-size:16px;color:#444}
+  #checkout-section{font-family:'Anek Bangla',sans-serif;background:#eef4f8;}
+  #checkout-section .panel{background:#fff;border-radius:.75rem;padding:1.25rem;box-shadow:0 1px 3px rgba(0,0,0,.06);border:1px solid #e6edf3}
+  #checkout-section h2.section-title{font-size:1.15rem;font-weight:800;color:#0f172a;margin:0 0 1rem}
+
+  /* product select cards */
+  .product-select-list{border:1px solid #f3d6d6;border-radius:.75rem;overflow:hidden;margin-bottom:1.75rem}
+  .product-select-card{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fdeeee;border-bottom:none;transition:.2s}
+  .product-select-card:last-child{border-bottom:none}
+  .product-select-card.unselected{background:#fdf6df}
+  .product-select-card .chk-wrap{flex:none}
+  .product-select-card input[type=checkbox]{width:19px;height:19px;accent-color:#e11d48;cursor:pointer}
+  .product-select-card .thumb{flex:none;width:46px;height:46px;border-radius:8px;overflow:hidden;background:#fff;border:1px solid #eee;display:flex;align-items:center;justify-content:center}
+  .product-select-card .thumb img{width:100%;height:100%;object-fit:cover}
+  .product-select-card .pname{flex:1 1 auto;min-width:0;font-weight:700;font-size:14px;color:#0f172a}
+  .product-select-card.unselected .pname{color:#dc2626}
+  .product-select-card .price-col{flex:none;text-align:right;font-size:12.5px;line-height:1.3;min-width:90px}
+  .product-select-card .price-old{display:block;color:#94a3b8;text-decoration:line-through;font-size:11.5px}
+  .product-select-card .price-new{display:block;font-weight:800;color:#0f172a}
+  /* .product-select-card .ribbon{position:absolute;top:8px;right:10px;background:#e11d48;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap} */
+  .product-select-card .ribbon{position:absolute;top:8px;right:10px;background:#e11d48;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap;pointer-events:none;z-index:2}
+  .recommended-product{
+    border:2px dotted #ff9800 !important;
+    border-radius:11px;
+    animation:borderGlow 1.5s linear infinite;
+}
+
+@keyframes borderGlow{
+    0%{border-color:#ff9800;}
+    50%{border-color:#ffd54f;}
+    100%{border-color:#ff9800;}
+}
+  @media (max-width:480px){
+    .product-select-card{gap:8px;padding:10px}
+    .product-select-card .pname{font-size:12.5px}
+    .product-select-card .price-col{min-width:70px;font-size:11px}
+    .product-select-card .ribbon{font-size:8.5px;padding:2px 6px;top:6px;right:6px}
+  }
+
+  #checkout-section .qty-wrap{display:flex;align-items:center;border:1px solid #ddd;border-radius:6px;overflow:hidden;background:#fff;flex:none}
+  #checkout-section .qty-btn{padding:5px 10px;background:#f3f4f6;cursor:pointer;user-select:none;font-weight:700;font-size:14px}
+  #checkout-section .qty-btn:hover{background:#e5e7eb}
+  #checkout-section .qty-input{width:34px;text-align:center;border:none;outline:none;font-size:13px;-moz-appearance:textfield}
+  #checkout-section .qty-input::-webkit-outer-spin-button,
+  #checkout-section .qty-input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .product-select-card.disabled .qty-wrap{opacity:.4;pointer-events:none}
+
+  .custom-radio-option{display:block;position:relative;padding:12px 12px 12px 38px;margin-bottom:10px;background:#f9f9f9;border:1px solid #e0e0e0;border-radius:8px;cursor:pointer;font-weight:700;font-size:15px;color:#444}
   .custom-radio-option:hover{border-color:#007cba;background:#f4f8fb}
-  .custom-radio-option.active-choice{border-color:#007cba;background:#f0f7fc;color:#000}
-  .custom-radio-option input[type=radio]{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;accent-color:#007cba}
-  #checkout-section .field{display:flex;flex-direction:column;gap:4px;margin-bottom:14px}
-  #checkout-section label{font-weight:600;font-size:14px}
+  .custom-radio-option.active-choice{border-color:#0ea5e9;background:#eef7fd;color:#0f172a}
+  .custom-radio-option input[type=radio]{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;accent-color:#0ea5e9}
+
+  #checkout-section .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+  #checkout-section label{font-weight:700;font-size:13.5px;color:#334155}
+  #checkout-section label .opt{font-weight:500;color:#94a3b8}
   #checkout-section input[type=text],
-  #checkout-section input[type=tel]{border:1px solid #ccc;border-radius:6px;padding:10px;font-size:15px;font-family:inherit}
+  #checkout-section input[type=tel]{border:1px solid #cbd5e1;border-radius:8px;padding:11px 12px;font-size:15px;font-family:inherit;width:100%;box-sizing:border-box;background:#fff}
+  #checkout-section input[type=text]:focus,
+  #checkout-section input[type=tel]:focus{outline:none;border-color:#0ea5e9;box-shadow:0 0 0 3px rgba(14,165,233,.15)}
+  #checkout-section input.field-error{border-color:#e11d48;box-shadow:0 0 0 3px rgba(225,29,72,.12)}
+
+  /* order summary card */
   .order-table{width:100%;border-collapse:collapse;font-size:14px}
-  .order-table th,.order-table td{padding:8px;border-bottom:1px solid #eee;text-align:left}
-  .place-order-btn{width:100%;padding:14px;background:#f97316;color:#fff;font-weight:800;font-size:17px;border:none;border-radius:8px;cursor:pointer}
-  .place-order-btn:hover{background:#ea580c}
+  .order-table th{text-align:left;padding:0 0 8px;font-size:12.5px;color:#64748b;font-weight:700;border-bottom:1px dashed #e2e8f0}
+  .order-table td{padding:12px 0;border-bottom:1px dashed #e2e8f0;vertical-align:middle}
+  .order-row-thumb{position:relative;width:52px;height:52px;flex:none}
+  .order-row-thumb img{width:100%;height:100%;object-fit:cover;border-radius:6px;border:1px solid #eee;background:#fff}
+  .order-row-remove{position:absolute;top:-6px;left:-6px;width:16px;height:16px;background:#fff;border:1px solid #cbd5e1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;line-height:1;color:#94a3b8;cursor:pointer}
+  .order-row-remove:hover{background:#fee2e2;border-color:#e11d48;color:#e11d48}
+  .order-row-info{display:flex;align-items:center;gap:10px}
+  .order-row-name{font-size:13.5px;font-weight:600;color:#334155}
+  .order-sum-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed #e2e8f0;font-size:14px}
+  .order-sum-row.total{font-weight:800;font-size:16px;border-bottom:none;padding-top:12px}
+  .cod-box{background:#f1f5f9;border-radius:8px;padding:12px;margin:1rem 0}
+  .cod-box .cod-title{font-weight:700;font-size:14px;margin-bottom:4px}
+  .cod-box .cod-desc{background:#e2e8f0;border-radius:6px;padding:8px 10px;font-size:12.5px;color:#475569}
+  .privacy-note{font-size:11.5px;color:#94a3b8;line-height:1.5;margin-bottom:1rem}
+  .privacy-note a{color:#e11d48;text-decoration:underline}
+  .place-order-btn{width:100%;padding:14px;background:#e11d48;color:#fff;font-weight:800;font-size:16px;border:none;border-radius:8px;cursor:pointer;transition:.2s}
+  .place-order-btn:hover{background:#be123c}
+  .place-order-btn:disabled{opacity:.6;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -167,8 +229,7 @@
 
       <div class="order-1 md:order-2 flex justify-center fade-in-up pb-2 md:pb-0">
         <div class="relative w-full max-w-md">
-          <!-- Replace src below with your own hosted product video/image -->
-          <video src="https://shop.prodhan.com/wp-content/uploads/2026/04/Flash-Card-Nasim-2nd-Video-720p.mp4" poster="" autoplay loop muted playsinline onclick="this.paused?this.play():this.pause()" class="hero-product-img w-full h-auto object-cover cursor-pointer" title="ভিডিওটি পজ বা প্লে করতে ক্লিক করুন"></video>
+          <video src="https://shop.prodhan.com/wp-content/uploads/2026/04/Flash-Card-Nasim-2nd-Video-720p.mp4" autoplay loop playsinline onclick="this.paused?this.play():this.pause()" class="hero-product-img w-full h-auto object-cover cursor-pointer" title="ভিডিওটি পজ বা প্লে করতে ক্লিক করুন"></video>
         </div>
       </div>
     </div>
@@ -338,63 +399,65 @@
      CHECKOUT (client-side demo — wire the form action / fetch()
      call below to your own order-processing endpoint)
 ========================================================= -->
-<section id="checkout-section" class="py-10 bg-white">
-  <div class="max-w-3xl mx-auto px-4">
-    <h2 class="text-xl font-bold mb-4">Your Products</h2>
+<section id="checkout-section" class="py-10">
+  <div class="max-w-6xl mx-auto px-4">
 
-    <div class="wcf-item">
-      <img src="" alt="Talking Flash Card">
-      <div class="flex-1">
-        <div class="font-bold">Talking Flash Card</div>
-        <div class="text-sm text-slate-500">
-          <span class="line-through">১,৩০০.০০৳</span> <span class="font-bold text-orange-600">৭৯৯.০০৳</span>
-        </div>
-      </div>
-      <div class="qty-wrap">
-        <span class="qty-btn" onclick="changeQty(-1)">−</span>
-        <input id="qty" class="qty-input" type="number" value="1" min="1" oninput="renderTotals()">
-        <span class="qty-btn" onclick="changeQty(1)">+</span>
-      </div>
+    <div class="panel mb-6">
+      <h2 class="section-title">Your Products</h2>
+      <div class="product-select-list" id="product-list"><!-- JS renders product-select-cards here --></div>
     </div>
 
-    <h3 class="font-bold mt-6 mb-2">ডেলিভারি এলাকা নির্বাচন করুন</h3>
-    <label class="custom-radio-option active-choice">
-      <input type="radio" name="shipping_area" value="inside_dhaka" checked onchange="renderTotals()"> ঢাকার ভিতরে (৬০৳)
-    </label>
-    <label class="custom-radio-option">
-      <input type="radio" name="shipping_area" value="outside_dhaka" onchange="renderTotals()"> ঢাকার বাহিরে (১২০৳)
-    </label>
-
-    <h3 class="font-bold mt-6 mb-2">অর্ডার করতে ফর্মটি পূরণ করতে হবে</h3>
     <form id="checkout-form" onsubmit="return submitOrder(event)">
-      <div class="field">
-        <label>আপনার নাম লিখুন *</label>
-        <input type="text" name="name" required>
-      </div>
-      <div class="field">
-        <label>আপনার ফোন নাম্বারটি লিখুন *</label>
-        <input type="tel" name="phone" required>
-      </div>
-      <div class="field">
-        <label>আপনার সম্পূর্ণ এড্রেস টি লিখুন *</label>
-        <input type="text" name="address" required>
-      </div>
+      <div class="grid lg:grid-cols-3 gap-6 items-start">
 
-      <table class="order-table my-4">
-        <thead><tr><th>Product</th><th>Subtotal</th></tr></thead>
-        <tbody><tr><td>Talking Flash Card × <span id="rowqty">1</span></td><td id="rowsubtotal">৭৯৯.০০৳</td></tr></tbody>
-        <tfoot>
-          <tr><th>Shipping</th><td id="rowshipping">৬০.০০৳</td></tr>
-          <tr><th>Total</th><td><strong id="rowtotal">৮৫৯.০০৳</strong></td></tr>
-        </tfoot>
-      </table>
+        <!-- LEFT: delivery + contact form -->
+        <div class="lg:col-span-2 panel">
+          <h2 class="section-title">অর্ডার করতে ফর্মটি পূরণ করতে হবে</h2>
 
-      <div class="mb-4">
-        <label class="flex items-center gap-2"><input type="radio" checked disabled> Cash on delivery</label>
-        <p class="text-sm text-slate-500 ml-6">Pay with cash upon delivery.</p>
+          <h3 class="font-bold mt-1 mb-2 text-[15px]">ডেলিভারি এলাকা নির্বাচন করুন</h3>
+          <label class="custom-radio-option active-choice">
+            <input type="radio" name="shipping_area" value="inside_dhaka" checked onchange="onShippingChange(this)"> ঢাকার ভিতরে (৬০৳)
+          </label>
+          <label class="custom-radio-option">
+            <input type="radio" name="shipping_area" value="outside_dhaka" onchange="onShippingChange(this)"> ঢাকার বাহিরে (১২০৳)
+          </label>
+
+          <div class="field mt-6">
+            <label>আপনার নাম লিখুন *</label>
+            <input type="text" name="name" required>
+          </div>
+          <div class="field">
+            <label>আপনার ফোন নাম্বারটি লিখুন <span class="opt">(optional)</span></label>
+            <input type="tel" name="phone">
+          </div>
+          <div class="field mb-0">
+            <label>আপনার সম্পূর্ণ এড্রেস টি লিখুন *</label>
+            <input type="text" name="address" required>
+          </div>
+        </div>
+
+        <!-- RIGHT: live order summary -->
+        <div class="panel lg:sticky lg:top-4">
+          <h2 class="section-title">Your order</h2>
+          <table class="order-table">
+            <thead><tr><th>Product</th><th style="text-align:right">Subtotal</th></tr></thead>
+            <tbody id="order-rows"><!-- JS renders order rows here --></tbody>
+          </table>
+
+          <div class="order-sum-row"><span>Subtotal</span><span id="rowsubtotal">৭৯৯.০০৳</span></div>
+          <div class="order-sum-row total"><span>Total</span><span id="rowtotal">৮৫৯.০০৳</span></div>
+
+          <div class="cod-box">
+            <div class="cod-title">Cash on delivery</div>
+            <div class="cod-desc">Pay with cash upon delivery.</div>
+          </div>
+
+          <p class="privacy-note">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#">privacy policy</a>.</p>
+
+          <button type="submit" id="place-order-btn" class="place-order-btn">অর্ডার করুন <span id="btntotal">৮৫৯.০০৳</span></button>
+        </div>
+
       </div>
-
-      <button type="submit" class="place-order-btn">অর্ডার করুন — <span id="btntotal">৮৫৯.০০৳</span></button>
     </form>
   </div>
 </section>
@@ -449,30 +512,117 @@
       });
     });
   }
+  function onShippingChange(){ renderTotals(); }
 
-  /* ---- checkout math ---- */
-  const UNIT_PRICE=799;
-  function changeQty(delta){
-    const q=document.getElementById('qty');
-    q.value=Math.max(1,(parseInt(q.value)||1)+delta);
+  /* ---- product / cart state ---- */
+  const PRODUCTS=[
+    {
+      id:'flashcard',
+      name:'Talking Flash Card',
+      img:'https://shop.prodhan.com/wp-content/uploads/2026/04/Product_photo_white_202604041744-300x300.jpeg',
+      original:1300, price:799,
+      checked:true, qty:1,
+      badge:null,
+      recommended:false
+    },
+    {
+      id:'talkingbook',
+      name:'Intelligence Talking Book',
+      img:'https://shop.prodhan.com/wp-content/uploads/2026/04/Talking-book-For-hero-section-300x300.png',
+      original:1500, price:899,
+      checked:false, qty:1,
+      badge:'বেস্ট রিকমেন্ডেড প্রোডাক্ট',
+      recommended:true
+    }
+  ];
+
+  function fmt(v){ return toBengaliNum(v.toLocaleString('en-US'))+'.০০৳'; }
+
+  function renderProductList(){
+    const wrap=document.getElementById('product-list');
+    wrap.innerHTML=PRODUCTS.map(p=>`
+      <div class="product-select-card ${p.checked?'':'unselected'} ${p.checked?'':'disabled'} ${p.recommended?'recommended-product':''}" data-id="${p.id}">
+        ${p.badge?`<span class="ribbon">${p.badge}</span>`:''}
+        <span class="chk-wrap">
+          <input type="checkbox" ${p.checked?'checked':''} onchange="toggleProduct('${p.id}', this.checked)">
+        </span>
+        <span class="thumb"><img src="${p.img}" alt="${p.name}"></span>
+        <span class="pname">${p.name}</span>
+        <span class="qty-wrap">
+          <span class="qty-btn" onclick="changeQty('${p.id}',-1)">−</span>
+          <input class="qty-input" type="number" min="1" value="${p.qty}" oninput="setQty('${p.id}', this.value)">
+          <span class="qty-btn" onclick="changeQty('${p.id}',1)">+</span>
+        </span>
+        <span class="price-col">
+          <span class="price-old">${toBengaliNum(p.original.toLocaleString('en-US'))}.০০৳</span>
+          <span class="price-new">${toBengaliNum(p.price.toLocaleString('en-US'))}.০০৳</span>
+        </span>
+      </div>
+    `).join('');
+  }
+
+  function toggleProduct(id, checked){
+    const p=PRODUCTS.find(x=>x.id===id);
+    p.checked=checked;
+    renderProductList();
     renderTotals();
   }
+  function changeQty(id, delta){
+    const p=PRODUCTS.find(x=>x.id===id);
+    p.qty=Math.max(1,(p.qty||1)+delta);
+    renderProductList();
+    renderTotals();
+  }
+  function setQty(id, val){
+    const p=PRODUCTS.find(x=>x.id===id);
+    p.qty=Math.max(1,parseInt(val)||1);
+    renderTotals();
+  }
+
   function renderTotals(){
-    const qty=Math.max(1,parseInt(document.getElementById('qty').value)||1);
-    const shipInside=document.querySelector('input[name="shipping_area"]:checked').value==='inside_dhaka';
-    const shipping=shipInside?60:120;
-    const subtotal=UNIT_PRICE*qty;
+    const selected=PRODUCTS.filter(p=>p.checked);
+    const rowsEl=document.getElementById('order-rows');
+    const placeBtn=document.getElementById('place-order-btn');
+
+    if(selected.length===0){
+      rowsEl.innerHTML='<tr><td colspan="2" style="text-align:center;color:#94a3b8;padding:16px 0">কোনো পণ্য নির্বাচিত নয়</td></tr>';
+    } else {
+      rowsEl.innerHTML=selected.map(p=>`
+        <tr>
+          <td>
+            <div class="order-row-info">
+              <span class="order-row-thumb">
+                <img src="${p.img}" alt="${p.name}">
+                <span class="order-row-remove" onclick="toggleProduct('${p.id}', false); document.querySelector('.product-select-card[data-id=\\'${p.id}\\'] input[type=checkbox]').checked=false;">✕</span>
+              </span>
+              <span class="order-row-name">${p.name} <strong>× ${toBengaliNum(p.qty)}</strong></span>
+            </div>
+          </td>
+          <td style="text-align:right">${fmt(p.price*p.qty)}</td>
+        </tr>
+      `).join('');
+    }
+
+    const subtotal=selected.reduce((s,p)=>s+p.price*p.qty,0);
+    const shipInsideEl=document.querySelector('input[name="shipping_area"]:checked');
+    const shipInside=!shipInsideEl || shipInsideEl.value==='inside_dhaka';
+    const shipping=selected.length? (shipInside?60:120) : 0;
     const total=subtotal+shipping;
-    const fmt=v=>toBengaliNum(v.toLocaleString('en-US'))+'.০০৳';
-    document.getElementById('rowqty').innerText=toBengaliNum(qty);
+
     document.getElementById('rowsubtotal').innerText=fmt(subtotal);
-    document.getElementById('rowshipping').innerText=fmt(shipping);
     document.getElementById('rowtotal').innerText=fmt(total);
     document.getElementById('btntotal').innerText=fmt(total);
+
+    placeBtn.disabled=selected.length===0;
   }
 
   function submitOrder(e){
     e.preventDefault();
+    const selected=PRODUCTS.filter(p=>p.checked);
+    if(selected.length===0){
+      alert('অর্ডার করতে অন্তত একটি প্রোডাক্ট সিলেক্ট করুন।');
+      return false;
+    }
     // ---- Wire this to your real backend, e.g.:
     // fetch('/your-order-endpoint', { method:'POST', body: new FormData(e.target) })
     //   .then(r => r.json()).then(data => { ...redirect to thank-you page... });
@@ -484,6 +634,7 @@
     startCountdown();
     initStickyVisibility();
     initRadioStyling();
+    renderProductList();
     renderTotals();
   });
 </script>
