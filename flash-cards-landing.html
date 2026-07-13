@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Flash Cards – Prodhan.com (Static Recreation)</title>
+    <title>Flash Cards – Prodhan.com</title>
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      href="https://storage.biddabari.online/biddabari-bucket/uploads/all/4PCgKQGv93MGiJXMIdyMFGboRpRR2GV8YNam0JIE.webp"
+    />
+    <!-- Google fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800;900&family=Anek+Bangla:wght@400;500;600;700&display=swap"
       rel="stylesheet"
@@ -1765,7 +1771,12 @@
               <!-- NAME -->
               <div class="field mt-6">
                 <label>আপনার নাম লিখুন *</label>
-                <input type="text" name="name" required  placeholder="Enter your full name" />
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  placeholder="Enter your full name"
+                />
               </div>
               <!-- PHN NMBR -->
               <div class="field">
@@ -1784,7 +1795,12 @@
               <!-- address -->
               <div class="field mb-0">
                 <label>আপনার সম্পূর্ণ এড্রেস টি লিখুন *</label>
-                <input type="text" name="address" required placeholder="Enter your full address"/>
+                <input
+                  type="text"
+                  name="address"
+                  required
+                  placeholder="Enter your full address"
+                />
               </div>
             </div>
 
@@ -1861,9 +1877,7 @@
             </svg>
           </div>
           <h3 class="oc-title">অভিনন্দন</h3>
-          <p class="oc-sub">
-            আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে। ধন্যবাদ।
-          </p>
+          <p class="oc-sub">আপনার অর্ডারটি সফলভাবে সম্পন্ন হয়েছে। ধন্যবাদ।</p>
         </div>
 
         <div class="oc-body">
@@ -2201,9 +2215,7 @@
             month: "long",
             day: "numeric",
           });
-        document.getElementById("oc-order-total").innerText = fmt(
-          order.total,
-        );
+        document.getElementById("oc-order-total").innerText = fmt(order.total);
 
         document.getElementById("oc-order-rows").innerHTML = order.items
           .map(
@@ -2215,12 +2227,8 @@
           )
           .join("");
 
-        document.getElementById("oc-subtotal").innerText = fmt(
-          order.subtotal,
-        );
-        document.getElementById("oc-shipping").innerText = fmt(
-          order.shipping,
-        );
+        document.getElementById("oc-subtotal").innerText = fmt(order.subtotal);
+        document.getElementById("oc-shipping").innerText = fmt(order.shipping);
         document.getElementById("oc-shipping-area").innerText =
           "via " + (order.shipInside ? "ঢাকার ভিতরে" : "ঢাকার বাহিরে");
         document.getElementById("oc-total").innerText = fmt(order.total);
