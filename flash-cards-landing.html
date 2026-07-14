@@ -1779,7 +1779,7 @@
                   value="outside_dhaka"
                   onchange="onShippingChange(this)"
                 />
-                ঢাকার বাহিরে (১২০৳)
+                ঢাকার বাহিরে (১১০৳)
               </label>
               <!-- NAME -->
               <div class="field mt-6">
@@ -1834,6 +1834,16 @@
 
               <div class="order-sum-row">
                 <span>Subtotal</span><span id="rowsubtotal">৭৯৯.০০৳</span>
+              </div>
+              <div class="order-sum-row">
+                <span
+                  >Delivery Charge
+                  <small
+                    id="rowshipping-area"
+                    style="color: #94a3b8; font-weight: 500"
+                  ></small
+                ></span>
+                <span id="rowshipping">৬০.০০৳</span>
               </div>
               <div class="order-sum-row total">
                 <span>Total</span><span id="rowtotal">৮৫৯.০০৳</span>
@@ -2158,10 +2168,13 @@
         );
         const shipInside =
           !shipInsideEl || shipInsideEl.value === "inside_dhaka";
-        const shipping = selected.length ? (shipInside ? 60 : 120) : 0;
+        const shipping = selected.length ? (shipInside ? 60 : 110) : 0;
         const total = subtotal + shipping;
 
         document.getElementById("rowsubtotal").innerText = fmt(subtotal);
+        document.getElementById("rowshipping").innerText = fmt(shipping);
+        document.getElementById("rowshipping-area").innerText =
+          "(" + (shipInside ? "ঢাকার ভিতরে" : "ঢাকার বাহিরে") + ")"; // ← for inside dhaka or outside dhaka
         document.getElementById("rowtotal").innerText = fmt(total);
         document.getElementById("btntotal").innerText = fmt(total);
 
@@ -2199,7 +2212,7 @@
       function buildDemoOrderData(form, selected) {
         const fd = new FormData(form);
         const shipInside = fd.get("shipping_area") !== "outside_dhaka";
-        const shipping = shipInside ? 60 : 120;
+        const shipping = shipInside ? 60 : 110;
         const subtotal = selected.reduce((s, p) => s + p.price * p.qty, 0);
         return {
           orderNumber: Math.floor(10000 + Math.random() * 89999),
